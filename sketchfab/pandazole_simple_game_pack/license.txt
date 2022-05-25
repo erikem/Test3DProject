@@ -1,0 +1,11 @@
+Model Information:
+* title:	Pandazole Simple Game Pack
+* source:	https://sketchfab.com/3d-models/pandazole-simple-game-pack-7a43981bf5d34ea9ae314cfd8269f8bd
+* author:	Pandazole (https://sketchfab.com/Pandazole)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Pandazole Simple Game Pack" (https://sketchfab.com/3d-models/pandazole-simple-game-pack-7a43981bf5d34ea9ae314cfd8269f8bd) by Pandazole (https://sketchfab.com/Pandazole) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)

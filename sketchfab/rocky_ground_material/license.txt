@@ -1,0 +1,11 @@
+Model Information:
+* title:	Rocky Ground Material
+* source:	https://sketchfab.com/3d-models/rocky-ground-material-13e1c078dc1f42dab1bf39c241ee4d14
+* author:	Mysticbobo (https://sketchfab.com/Mysticbobo)
+
+Model License:
+* license type:	CC-BY-NC-ND-4.0 (http://creativecommons.org/licenses/by-nc-nd/4.0/)
+* requirements:	Author must be credited. No commercial use. Modified versions can not be distributed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Rocky Ground Material" (https://sketchfab.com/3d-models/rocky-ground-material-13e1c078dc1f42dab1bf39c241ee4d14) by Mysticbobo (https://sketchfab.com/Mysticbobo) licensed under CC-BY-NC-ND-4.0 (http://creativecommons.org/licenses/by-nc-nd/4.0/)

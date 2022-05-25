@@ -1,0 +1,11 @@
+Model Information:
+* title:	coin
+* source:	https://sketchfab.com/3d-models/coin-85a6661e7c13495f94c4a5042c13d086
+* author:	lamthaono13 (https://sketchfab.com/lamthaono13)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "coin" (https://sketchfab.com/3d-models/coin-85a6661e7c13495f94c4a5042c13d086) by lamthaono13 (https://sketchfab.com/lamthaono13) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)

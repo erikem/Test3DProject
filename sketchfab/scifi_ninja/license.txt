@@ -1,0 +1,11 @@
+Model Information:
+* title:	Scifi Ninja
+* source:	https://sketchfab.com/3d-models/scifi-ninja-b7126462ab4f438f96674f87460e6073
+* author:	Sithoriax (https://sketchfab.com/Sithoriax)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Scifi Ninja" (https://sketchfab.com/3d-models/scifi-ninja-b7126462ab4f438f96674f87460e6073) by Sithoriax (https://sketchfab.com/Sithoriax) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)

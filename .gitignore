@@ -1,0 +1,6 @@
+.import
+*.import
+*.translation
+export_presets.cfg
+.mono/
+Test3DProject.exe
