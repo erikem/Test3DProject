@@ -1677,6 +1677,9 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 13.3412, 1.04506, -50.9725 )
 [node name="EnemyNormal2" parent="Enemies" instance=ExtResource( 13 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 42.0439, 1.04506, 14.9817 )
 
+[node name="EnemyNormal7" parent="Enemies" instance=ExtResource( 13 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 42.0893, 1.04506, 37.1175 )
+
 [node name="EnemyNormal3" parent="Enemies" instance=ExtResource( 13 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -27.0472, 1.04506, -41.7414 )
 
