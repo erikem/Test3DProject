@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://EnemyNormal.tscn" type="PackedScene" id=1]
+
+[node name="EnemyNormal001_Normalized" type="Spatial"]
+
+[node name="EnemyNormal" parent="." instance=ExtResource( 1 )]
+transform = Transform( 0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, 0, 0, 0 )

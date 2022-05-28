@@ -1,0 +1,11 @@
+Model Information:
+* title:	Staff of Magic Missile
+* source:	https://sketchfab.com/3d-models/staff-of-magic-missile-995a057562e5483f91d14b09ea18d992
+* author:	Matt LeMoine (https://sketchfab.com/Matt_LeMoine)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Staff of Magic Missile" (https://sketchfab.com/3d-models/staff-of-magic-missile-995a057562e5483f91d14b09ea18d992) by Matt LeMoine (https://sketchfab.com/Matt_LeMoine) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)

@@ -1,0 +1,622 @@
+{
+  "accessors": [
+    {
+      "bufferView": 3,
+      "componentType": 5126,
+      "count": 2403,
+      "max": [
+        0.7540778517723083,
+        0.7799641489982605,
+        0.23357121646404266
+      ],
+      "min": [
+        -0.8347278237342834,
+        -0.6696354746818542,
+        -0.23357118666172028
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 3,
+      "byteOffset": 28836,
+      "componentType": 5126,
+      "count": 2403,
+      "max": [
+        0.9975636005401611,
+        0.9976916313171387,
+        0.9995748996734619
+      ],
+      "min": [
+        -0.997672438621521,
+        -0.9976863265037537,
+        -0.9961948990821838
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 4,
+      "componentType": 5126,
+      "count": 2403,
+      "max": [
+        0.9938101768493652,
+        0.9826629757881165,
+        0.9994309544563293,
+        1.0
+      ],
+      "min": [
+        -0.8936662673950195,
+        -0.9380692839622498,
+        -0.9998778700828552,
+        -1.0
+      ],
+      "type": "VEC4"
+    },
+    {
+      "bufferView": 2,
+      "componentType": 5126,
+      "count": 2403,
+      "max": [
+        1.0,
+        1.0
+      ],
+      "min": [
+        0.0,
+        0.0
+      ],
+      "type": "VEC2"
+    },
+    {
+      "bufferView": 1,
+      "componentType": 5125,
+      "count": 5808,
+      "type": "SCALAR"
+    },
+    {
+      "bufferView": 5,
+      "componentType": 5126,
+      "count": 5,
+      "max": [
+        99.99999237060547,
+        0.0,
+        0.0,
+        0.0,
+        0.43938499689102173,
+        99.99998474121094,
+        0.0,
+        0.0,
+        0.8191521763801575,
+        0.0,
+        100.00001525878906,
+        0.0,
+        0.016208354383707047,
+        0.4843997657299042,
+        0.0,
+        1.0
+      ],
+      "min": [
+        0.36868780851364136,
+        -0.7660443186759949,
+        -0.5265408754348755,
+        0.0,
+        0.0,
+        0.6427875757217407,
+        -0.6275067329406738,
+        0.0,
+        0.0,
+        -5.089610866093608e-08,
+        0.5735764503479004,
+        0.0,
+        0.0,
+        -0.2872779071331024,
+        -0.023147838190197945,
+        1.0
+      ],
+      "type": "MAT4"
+    },
+    {
+      "bufferView": 0,
+      "componentType": 5123,
+      "count": 2403,
+      "type": "VEC4"
+    },
+    {
+      "bufferView": 4,
+      "byteOffset": 38448,
+      "componentType": 5126,
+      "count": 2403,
+      "max": [
+        1.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "min": [
+        1.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "type": "VEC4"
+    },
+    {
+      "bufferView": 6,
+      "componentType": 5126,
+      "count": 241,
+      "max": [
+        4.800000190734863
+      ],
+      "min": [
+        0.0
+      ],
+      "type": "SCALAR"
+    },
+    {
+      "bufferView": 7,
+      "componentType": 5126,
+      "count": 241,
+      "max": [
+        1.232937346375097e-14,
+        1.0,
+        1.430453655916833e-14,
+        1.0
+      ],
+      "min": [
+        -1.4272086726959017e-14,
+        -0.8660253882408142,
+        -7.083014865816653e-15,
+        -0.5
+      ],
+      "type": "VEC4"
+    },
+    {
+      "bufferView": 6,
+      "byteOffset": 964,
+      "componentType": 5126,
+      "count": 241,
+      "max": [
+        4.800000190734863
+      ],
+      "min": [
+        0.0
+      ],
+      "type": "SCALAR"
+    },
+    {
+      "bufferView": 7,
+      "byteOffset": 3856,
+      "componentType": 5126,
+      "count": 241,
+      "max": [
+        1.235944228634555e-14,
+        1.0,
+        1.430742663558436e-14,
+        1.0
+      ],
+      "min": [
+        -1.4272086726959017e-14,
+        -0.8549121022224426,
+        -7.0830131717507586e-15,
+        -0.49999988079071045
+      ],
+      "type": "VEC4"
+    }
+  ],
+  "animations": [
+    {
+      "channels": [
+        {
+          "sampler": 0,
+          "target": {
+            "node": 9,
+            "path": "rotation"
+          }
+        },
+        {
+          "sampler": 1,
+          "target": {
+            "node": 10,
+            "path": "rotation"
+          }
+        }
+      ],
+      "name": "MissileStaffAnim|StaffAnim|StaffAnim|StaffAnimAction|StaffAnim|StaffAnimAction",
+      "samplers": [
+        {
+          "input": 8,
+          "interpolation": "LINEAR",
+          "output": 9
+        },
+        {
+          "input": 10,
+          "interpolation": "LINEAR",
+          "output": 11
+        }
+      ]
+    }
+  ],
+  "asset": {
+    "extras": {
+      "author": "Matt LeMoine (https://sketchfab.com/Matt_LeMoine)",
+      "license": "CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)",
+      "source": "https://sketchfab.com/3d-models/staff-of-magic-missile-995a057562e5483f91d14b09ea18d992",
+      "title": "Staff of Magic Missile"
+    },
+    "generator": "Sketchfab-12.67.0",
+    "version": "2.0"
+  },
+  "bufferViews": [
+    {
+      "buffer": 0,
+      "byteLength": 19224,
+      "byteStride": 8,
+      "name": "shortBufferViews",
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 23232,
+      "byteOffset": 19224,
+      "name": "floatBufferViews",
+      "target": 34963
+    },
+    {
+      "buffer": 0,
+      "byteLength": 19224,
+      "byteOffset": 42456,
+      "byteStride": 8,
+      "name": "floatBufferViews",
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 57672,
+      "byteOffset": 61680,
+      "byteStride": 12,
+      "name": "floatBufferViews",
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 76896,
+      "byteOffset": 119352,
+      "byteStride": 16,
+      "name": "floatBufferViews",
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 320,
+      "byteOffset": 196248,
+      "name": "floatBufferViews"
+    },
+    {
+      "buffer": 0,
+      "byteLength": 1928,
+      "byteOffset": 196568,
+      "name": "floatBufferViews"
+    },
+    {
+      "buffer": 0,
+      "byteLength": 7712,
+      "byteOffset": 198496,
+      "byteStride": 16,
+      "name": "floatBufferViews"
+    }
+  ],
+  "buffers": [
+    {
+      "byteLength": 206208,
+      "uri": "scene.bin"
+    }
+  ],
+  "images": [
+    {
+      "uri": "textures/MissileStaff_baseColor.png"
+    },
+    {
+      "uri": "textures/MissileStaff_metallicRoughness.png"
+    },
+    {
+      "uri": "textures/MissileStaff_emissive.png"
+    },
+    {
+      "uri": "textures/MissileStaff_normal.png"
+    }
+  ],
+  "materials": [
+    {
+      "alphaMode": "BLEND",
+      "doubleSided": true,
+      "emissiveFactor": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "emissiveTexture": {
+        "index": 2
+      },
+      "name": "MissileStaff",
+      "normalTexture": {
+        "index": 3
+      },
+      "pbrMetallicRoughness": {
+        "baseColorTexture": {
+          "index": 0
+        },
+        "metallicRoughnessTexture": {
+          "index": 1
+        }
+      }
+    }
+  ],
+  "meshes": [
+    {
+      "name": "MissileStaff_MissileStaff_0",
+      "primitives": [
+        {
+          "attributes": {
+            "JOINTS_0": 6,
+            "NORMAL": 1,
+            "POSITION": 0,
+            "TANGENT": 2,
+            "TEXCOORD_0": 3,
+            "WEIGHTS_0": 7
+          },
+          "indices": 4,
+          "material": 0,
+          "mode": 4
+        }
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "children": [
+        1
+      ],
+      "matrix": [
+        0.016987239941954613,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        3.771924981678024e-18,
+        -0.016987239941954613,
+        0.0,
+        0.0,
+        0.016987239941954613,
+        3.771924981678024e-18,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "name": "Sketchfab_model"
+    },
+    {
+      "children": [
+        2
+      ],
+      "matrix": [
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0,
+        0.0,
+        0.0,
+        -1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "name": "4414d3ff01864f3183de9ba4dff68461.fbx"
+    },
+    {
+      "children": [
+        3
+      ],
+      "name": "Object_2"
+    },
+    {
+      "children": [
+        4,
+        13
+      ],
+      "name": "RootNode"
+    },
+    {
+      "children": [
+        5
+      ],
+      "name": "MissileStaffAnim",
+      "rotation": [
+        -0.4304593801498413,
+        -0.5609855055809021,
+        -0.030843591317534447,
+        0.7064337730407715
+      ],
+      "scale": [
+        100.0,
+        100.0,
+        100.0
+      ],
+      "translation": [
+        75.38375091552734,
+        -66.94335174560547,
+        0.0
+      ]
+    },
+    {
+      "children": [
+        6,
+        12,
+        11
+      ],
+      "name": "Object_5"
+    },
+    {
+      "children": [
+        7
+      ],
+      "name": "_rootJoint"
+    },
+    {
+      "children": [
+        8
+      ],
+      "name": "RootBone_00",
+      "rotation": [
+        1.1833410695771818e-07,
+        0.7071068286895752,
+        0.7071067094802856,
+        -1.156396578494423e-08
+      ]
+    },
+    {
+      "children": [
+        9,
+        10
+      ],
+      "name": "StaffBone_01",
+      "rotation": [
+        9.185178129200722e-08,
+        1.0,
+        -2.1326280449712395e-14,
+        -7.549790126404332e-08
+      ],
+      "translation": [
+        9.614620211095826e-08,
+        0.5233768224716187,
+        -3.560693406789994e-14
+      ]
+    },
+    {
+      "name": "CounterBone_02",
+      "rotation": [
+        -1.475966091425522e-14,
+        0.9335804581642151,
+        1.2077481111830591e-14,
+        0.3583678603172302
+      ],
+      "translation": [
+        -8.153200337090993e-15,
+        0.5294820070266724,
+        -7.112366251504909e-15
+      ]
+    },
+    {
+      "name": "ClockBone_03",
+      "rotation": [
+        7.634729776010742e-15,
+        -0.5664063692092896,
+        1.4534878698844664e-14,
+        0.824126124382019
+      ],
+      "translation": [
+        -1.5029644195863057e-14,
+        0.7716777324676514,
+        7.119305145408816e-15
+      ]
+    },
+    {
+      "matrix": [
+        36.86878106659388,
+        43.93849332956829,
+        81.9151984821532,
+        0.0,
+        52.654088814121174,
+        62.75066614350021,
+        -57.35763186296404,
+        0.0,
+        -76.60444072896142,
+        64.27878520888046,
+        -7.583064101292196e-06,
+        0.0,
+        75.38378300505187,
+        -66.94335986698859,
+        -1.4546437181042511e-05,
+        1.0
+      ],
+      "name": "Object_11"
+    },
+    {
+      "mesh": 0,
+      "name": "Object_12",
+      "skin": 0
+    },
+    {
+      "name": "MissileStaff",
+      "rotation": [
+        -0.4304593801498413,
+        -0.5609856247901917,
+        -0.030843649059534073,
+        0.7064337730407715
+      ],
+      "scale": [
+        99.99999237060547,
+        99.99999237060547,
+        100.00000762939453
+      ],
+      "translation": [
+        75.38378143310547,
+        -66.943359375,
+        -1.8557651856099255e-05
+      ]
+    }
+  ],
+  "samplers": [
+    {
+      "magFilter": 9729,
+      "minFilter": 9987,
+      "wrapS": 10497,
+      "wrapT": 10497
+    }
+  ],
+  "scene": 0,
+  "scenes": [
+    {
+      "name": "Sketchfab_Scene",
+      "nodes": [
+        0
+      ]
+    }
+  ],
+  "skins": [
+    {
+      "inverseBindMatrices": 5,
+      "joints": [
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "skeleton": 6
+    }
+  ],
+  "textures": [
+    {
+      "sampler": 0,
+      "source": 0
+    },
+    {
+      "sampler": 0,
+      "source": 1
+    },
+    {
+      "sampler": 0,
+      "source": 2
+    },
+    {
+      "sampler": 0,
+      "source": 3
+    }
+  ]
+}

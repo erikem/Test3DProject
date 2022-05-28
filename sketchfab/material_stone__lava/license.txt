@@ -1,0 +1,11 @@
+Model Information:
+* title:	Material Stone & Lava
+* source:	https://sketchfab.com/3d-models/material-stone-lava-54f56ec9db844d6fb9179830b36d165b
+* author:	Kenny Kwok. (https://sketchfab.com/motpanda)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Material Stone & Lava" (https://sketchfab.com/3d-models/material-stone-lava-54f56ec9db844d6fb9179830b36d165b) by Kenny Kwok. (https://sketchfab.com/motpanda) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)

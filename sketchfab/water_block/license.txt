@@ -1,0 +1,11 @@
+Model Information:
+* title:	Water Block
+* source:	https://sketchfab.com/3d-models/water-block-3852da34b24a44a583a090420c79e386
+* author:	Anant_Juvekar (https://sketchfab.com/Anant_Juvekar)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Water Block" (https://sketchfab.com/3d-models/water-block-3852da34b24a44a583a090420c79e386) by Anant_Juvekar (https://sketchfab.com/Anant_Juvekar) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)

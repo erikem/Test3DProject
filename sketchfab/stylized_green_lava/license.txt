@@ -1,0 +1,11 @@
+Model Information:
+* title:	Stylized Green Lava
+* source:	https://sketchfab.com/3d-models/stylized-green-lava-e155646184ba4bb29124325e4c28092e
+* author:	Akif Akdemir (https://sketchfab.com/akifakdemir)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Stylized Green Lava" (https://sketchfab.com/3d-models/stylized-green-lava-e155646184ba4bb29124325e4c28092e) by Akif Akdemir (https://sketchfab.com/akifakdemir) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
