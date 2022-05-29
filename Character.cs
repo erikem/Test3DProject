@@ -31,16 +31,18 @@ public class Character : KinematicBody
     private UI PlayerUI;
     private AnimationPlayer SwordAnimator;
     private bool WeaponDamageDealt = false;
+    private Spatial model;
 
     public override void _Ready()
     {
         Vel = new Vector3();
-        PlayerCamera = GetNode("CameraController") as Camera;
-        AttackRayCast = GetNode("SwordController/Sword/AttackRayCast") as RayCast;
+        PlayerCamera = GetNode("PlayerAttachedCameraController/PlayerCamera") as Camera;
+        AttackRayCast = GetNode("Model/SwordController/Sword/AttackRayCast") as RayCast;
         RegenTimer = GetNode("RegenTimer") as Timer;
+        model = GetNode("Model") as Spatial;
         RegenTimer.WaitTime = RegenFrequency;
         RegenTimer.Start();
-        SwordAnimator = GetNode("SwordController/SwordAnimator") as AnimationPlayer;
+        SwordAnimator = GetNode("Model/SwordController/SwordAnimator") as AnimationPlayer;
         PlayerUI = GetNode("/root/MainScene/UICanvas/UI") as UI;
         PlayerUI.UpdateHealthBar(CurrentHP, MaxHP);
         PlayerUI.UpdateGoldText(Gold);
@@ -49,6 +51,7 @@ public class Character : KinematicBody
     }
     public override void _PhysicsProcess(float delta)
     {
+        int degreeToTurn = 0;
         Vel.x = 0;
         Vel.z = 0;
         Vector3 input = new Vector3();
@@ -87,10 +90,26 @@ public class Character : KinematicBody
                 DoubleJumpExecuted = true;
             }
             Vel.y = JumpForce;
-            Console.WriteLine("Now character has this many gold: <" + Gold.ToString() + ">");
+            GD.Print("Now character has this many gold: <" + Gold.ToString() + ">");
         }
 
+        if (direction.x != 0 || direction.z != 0)
+        {
+            //GD.Print(direction.x + ", " + direction.z);
+            //Rotation.x = 0;
+            //model.LookAt(direction, Vector3.Up);
+            //var lookAngle = new Vector3(Vel.x, 1, -Vel.z);
+            //LookAt(lookAngle, Vector3.Up);
+            //var angle = Math.Atan2(Vel.x, Vel.z);
+            //model.Rotate(new Vector3(0, 1, 0), new Vector2(Vel.x, -Vel.z).Angle());
+            //LookAt(Transform.origin + Vel, Vector3.Up);
+            GD.Print(new Vector2(Vel.x, -Vel.z).Angle());
+            var rot = new Vector2(-Vel.x, -Vel.z).Angle() + Mathf.Deg2Rad(90) + model.Rotation.y;
+            model.Transform = model.Transform.Rotated(new Vector3(0, 1, 0), -rot);
+
+        }
         Vel = MoveAndSlide(Vel, Vector3.Up);
+
 
     }
     private void _on_RegenTimer_timeout()

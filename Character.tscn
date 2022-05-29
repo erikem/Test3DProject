@@ -11,10 +11,6 @@
 [ext_resource path="res://Sword.tscn" type="PackedScene" id=9]
 [ext_resource path="res://CameraController.cs" type="Script" id=10]
 
-[sub_resource type="CapsuleShape" id=9]
-radius = 1.14843
-height = 5.17538
-
 [sub_resource type="ArrayMesh" id=1]
 resource_name = "Sketchfab_Scene_Object_0"
 surfaces/0 = {
@@ -194,81 +190,89 @@ tracks/1/keys = {
 "values": [ Transform( 0.6, 0, 0, 0, -0.391902, 0.454327, 0, -0.454327, -0.391902, -2.68039, 3.38893, 0.139512 ) ]
 }
 
-[node name="PlayerCharacter" type="KinematicBody"]
+[sub_resource type="CapsuleShape" id=9]
+radius = 1.14843
+height = 5.17538
+
+[node name="Spatial" type="Spatial"]
+
+[node name="PlayerCharacter" type="KinematicBody" parent="."]
 collision_layer = 3
 collision_mask = 3
 script = ExtResource( 8 )
 
-[node name="CollisionShape" type="CollisionShape" parent="."]
-transform = Transform( 1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 3.73804, 0 )
-shape = SubResource( 9 )
-
-[node name="BodyParts" type="Spatial" parent="."]
-transform = Transform( 0.04, 0, 0, 0, -1.74846e-09, 0.04, 0, -0.04, -1.74846e-09, 0, 0, 0 )
-
-[node name="Object_2" type="MeshInstance" parent="BodyParts"]
-mesh = SubResource( 1 )
-skeleton = NodePath("../..")
-material/0 = null
-
-[node name="Object_3" type="MeshInstance" parent="BodyParts"]
-mesh = SubResource( 2 )
-skeleton = NodePath("../..")
-material/0 = null
-
-[node name="Object_4" type="MeshInstance" parent="BodyParts"]
-mesh = SubResource( 3 )
-skeleton = NodePath("../..")
-material/0 = null
-
-[node name="Object_5" type="MeshInstance" parent="BodyParts"]
-mesh = SubResource( 4 )
-skeleton = NodePath("../..")
-material/0 = null
-
-[node name="Object_6" type="MeshInstance" parent="BodyParts"]
-mesh = SubResource( 5 )
-skeleton = NodePath("../..")
-material/0 = null
-
-[node name="Object_7" type="MeshInstance" parent="BodyParts"]
-mesh = SubResource( 6 )
-skeleton = NodePath("../..")
-material/0 = null
-
-[node name="Object_8" type="MeshInstance" parent="BodyParts"]
-mesh = SubResource( 7 )
-skeleton = NodePath("../..")
-material/0 = null
-
-[node name="Object_9" type="MeshInstance" parent="BodyParts"]
-mesh = SubResource( 8 )
-skeleton = NodePath("../..")
-material/0 = null
-
-[node name="CameraController" type="Spatial" parent="."]
+[node name="PlayerAttachedCameraController" type="Spatial" parent="PlayerCharacter"]
 script = ExtResource( 10 )
 
-[node name="Camera" type="Camera" parent="CameraController"]
+[node name="PlayerCamera" type="Camera" parent="PlayerCharacter/PlayerAttachedCameraController"]
 transform = Transform( -1, 6.75016e-14, 8.74228e-08, 6.94667e-08, 0.607126, 0.794605, -5.30767e-08, 0.794605, -0.607126, 0, 29.5139, -20.615 )
 far = 200.0
 
-[node name="SwordController" type="Spatial" parent="."]
+[node name="Model" type="Spatial" parent="PlayerCharacter"]
 
-[node name="Sword" parent="SwordController" instance=ExtResource( 9 )]
+[node name="BodyParts" type="Spatial" parent="PlayerCharacter/Model"]
+transform = Transform( 0.04, 0, 0, 0, -1.74846e-09, 0.04, 0, -0.04, -1.74846e-09, 0, 0, 0 )
+
+[node name="Object_2" type="MeshInstance" parent="PlayerCharacter/Model/BodyParts"]
+mesh = SubResource( 1 )
+skeleton = NodePath("../../..")
+material/0 = null
+
+[node name="Object_3" type="MeshInstance" parent="PlayerCharacter/Model/BodyParts"]
+mesh = SubResource( 2 )
+skeleton = NodePath("../../..")
+material/0 = null
+
+[node name="Object_4" type="MeshInstance" parent="PlayerCharacter/Model/BodyParts"]
+mesh = SubResource( 3 )
+skeleton = NodePath("../../..")
+material/0 = null
+
+[node name="Object_5" type="MeshInstance" parent="PlayerCharacter/Model/BodyParts"]
+mesh = SubResource( 4 )
+skeleton = NodePath("../../..")
+material/0 = null
+
+[node name="Object_6" type="MeshInstance" parent="PlayerCharacter/Model/BodyParts"]
+mesh = SubResource( 5 )
+skeleton = NodePath("../../..")
+material/0 = null
+
+[node name="Object_7" type="MeshInstance" parent="PlayerCharacter/Model/BodyParts"]
+mesh = SubResource( 6 )
+skeleton = NodePath("../../..")
+material/0 = null
+
+[node name="Object_8" type="MeshInstance" parent="PlayerCharacter/Model/BodyParts"]
+mesh = SubResource( 7 )
+skeleton = NodePath("../../..")
+material/0 = null
+
+[node name="Object_9" type="MeshInstance" parent="PlayerCharacter/Model/BodyParts"]
+mesh = SubResource( 8 )
+skeleton = NodePath("../../..")
+material/0 = null
+
+[node name="SwordController" type="Spatial" parent="PlayerCharacter/Model"]
+
+[node name="Sword" parent="PlayerCharacter/Model/SwordController" instance=ExtResource( 9 )]
 transform = Transform( 0.6, 0, 0, 0, -0.391902, 0.454327, 0, -0.454327, -0.391902, -2.68039, 3.38893, 0.139512 )
 
-[node name="AttackRayCast" type="RayCast" parent="SwordController/Sword"]
+[node name="AttackRayCast" type="RayCast" parent="PlayerCharacter/Model/SwordController/Sword"]
 transform = Transform( 0.999921, 0.00902746, 0.00871619, -0.00950193, 0.998384, 0.0560242, -0.00819635, -0.0561025, 0.998391, 1.87535, 0, 0 )
 enabled = true
 cast_to = Vector3( 0, -11, 0 )
 debug_shape_thickness = 1
 
-[node name="SwordAnimator" type="AnimationPlayer" parent="SwordController"]
+[node name="SwordAnimator" type="AnimationPlayer" parent="PlayerCharacter/Model/SwordController"]
 anims/Attack1 = SubResource( 10 )
 anims/Attack2 = SubResource( 12 )
 anims/RESET = SubResource( 11 )
 
-[node name="RegenTimer" type="Timer" parent="."]
+[node name="CollisionShape" type="CollisionShape" parent="PlayerCharacter"]
+transform = Transform( 1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 3.73804, 0 )
+shape = SubResource( 9 )
 
-[connection signal="timeout" from="RegenTimer" to="." method="_on_RegenTimer_timeout"]
+[node name="RegenTimer" type="Timer" parent="PlayerCharacter"]
+
+[connection signal="timeout" from="PlayerCharacter/RegenTimer" to="PlayerCharacter" method="_on_RegenTimer_timeout"]

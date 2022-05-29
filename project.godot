@@ -26,9 +26,7 @@ config/icon="res://icon.png"
 
 [display]
 
-window/size/width=1920
-window/size/height=1080
-window/size/fullscreen=true
+window/size/height=768
 
 [editor_plugins]
 
@@ -37,6 +35,10 @@ enabled=PoolStringArray( "res://addons/sketchfab/plugin.cfg" )
 [gdnative]
 
 singletons=[ "res://addons/godot-git-plugin/git_api.gdnlib" ]
+
+[global]
+
+screen=false
 
 [input]
 

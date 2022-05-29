@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=2]
+[gd_scene load_steps=17 format=2]
 
 [ext_resource path="res://sketchfab/campsite_low-poly_asset_pack/color.material" type="Material" id=1]
 [ext_resource path="res://sketchfab/campsite_low-poly_asset_pack/black.material" type="Material" id=2]
@@ -12,7 +12,6 @@
 [ext_resource path="res://FloorTile.tscn" type="PackedScene" id=10]
 [ext_resource path="res://Coin.tscn" type="PackedScene" id=11]
 [ext_resource path="res://UI.tscn" type="PackedScene" id=12]
-[ext_resource path="res://EnemyNormal.tscn" type="PackedScene" id=13]
 
 [sub_resource type="ArrayMesh" id=1]
 resource_name = "Sketchfab_Scene_tent_color_0"
@@ -1664,24 +1663,3 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 40, 26, -27 )
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 50, 26, -7 )
 
 [node name="Enemies" type="Node" parent="."]
-
-[node name="EnemyNormal" parent="Enemies" instance=ExtResource( 13 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 1.04506, 7 )
-
-[node name="EnemyNormal5" parent="Enemies" instance=ExtResource( 13 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -56.0713, 1.04506, 40.9241 )
-
-[node name="EnemyNormal6" parent="Enemies" instance=ExtResource( 13 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 13.3412, 1.04506, -50.9725 )
-
-[node name="EnemyNormal2" parent="Enemies" instance=ExtResource( 13 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 42.0439, 1.04506, 14.9817 )
-
-[node name="EnemyNormal7" parent="Enemies" instance=ExtResource( 13 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 42.0893, 1.04506, 37.1175 )
-
-[node name="EnemyNormal3" parent="Enemies" instance=ExtResource( 13 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -27.0472, 1.04506, -41.7414 )
-
-[node name="EnemyNormal4" parent="Enemies" instance=ExtResource( 13 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 49.9963, 24.8033, -4.81204 )
