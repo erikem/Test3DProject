@@ -1,5 +1,0 @@
-[gd_scene format=2]
-
-[node name="Bullet" type="Area"]
-
-[node name="CollisionShape" type="CollisionShape" parent="."]

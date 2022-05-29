@@ -22,7 +22,7 @@ _global_script_class_icons={
 
 config/name="Test3DProject"
 run/main_scene="res://MainScene.tscn"
-config/icon="res://icon.png"
+config/icon="res://Resources/icon.png"
 
 [display]
 
