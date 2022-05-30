@@ -11,11 +11,11 @@ public class EnemyNormal : KinematicBody
     private float CurrentHP = 3f;
     private float MaxHP = 3f;
     private float Damage = 1f;
-    private float AttackDistance = 8f;
+    private float AttackDistance = 1.5f;
     private TimeSpan AttackRate = TimeSpan.FromSeconds(1.5f);
     private DateTime LastAttackTime;
-    private float MoveSpeed = 10f;
-    private float Gravity = 60;
+    private float MoveSpeed = 1f;
+    private float Gravity = 6;
     private Vector3 Vel;
     private RayCast AttackRayCast;
     private bool IsFalling = false;
@@ -24,6 +24,8 @@ public class EnemyNormal : KinematicBody
     private AnimationPlayer SwordAnimator;
     private bool WeaponDamageDealt = false;
     private KinematicBody Player;
+    private Spatial playerModel;
+    private Spatial myRoot;
 
     public override void _Ready()
     {
@@ -31,23 +33,32 @@ public class EnemyNormal : KinematicBody
         AttackRayCast = GetNode("SwordController/Sword/AttackRayCast") as RayCast;
         SwordAnimator = GetNode("SwordController/SwordAnimator") as AnimationPlayer;
         LastAttackTime = DateTime.MinValue;
-        Player = GetNode("/root/MainScene/Character") as KinematicBody;
+        Player = GetNode("/root/MainScene/Character001_Normalized/PlayerCharacter") as KinematicBody;
+        playerModel = GetNode("/root/MainScene/Character001_Normalized/PlayerCharacter/Model") as Spatial;
+        myRoot = GetParent().GetParent() as Spatial;
 
     }
     public override void _PhysicsProcess(float delta)
     {
-        //var dist = Translation.DistanceTo(Player.Translation);
-        var direction = (Player.Translation - Translation).Normalized();
-        var LookDirection = Player.Translation;
-        // LookDirection.z = 0;
-        // LookDirection.x = 0;
-        LookDirection.y = 1;
+        var dist = GlobalTransform.origin.DistanceTo(playerModel.GlobalTransform.origin);
+
+        //direction from current enemy to player in 3D plane
+        var direction3D = playerModel.GlobalTransform.origin - GlobalTransform.origin;
+        //nomrlaized direction with assuming Y value is 0 so it is not take into account
+        var direction = new Vector3(direction3D.x, 0, direction3D.z).Normalized();
+        //general direction of player
+        var LookDirection = playerModel.GlobalTransform.origin;
+        //setting Y value of look direction sop that enemies don't look UP/DOWN in case player is above/belwo them
+        LookDirection.y = 0;
+        //Trying to look at player but failing because we are looking 180 degress other way
         LookAt(LookDirection, Vector3.Up);
+        //compensating 1800 degrees to actually look at player
         RotateObjectLocal(Vector3.Up, Mathf.Pi);
+        //setting up speed to match general direction of player, multiplying by speed of enemy. Y value is modified by gravity
         Vel.x = direction.x * MoveSpeed;
         Vel.y -= Gravity * delta;
         Vel.z = direction.z * MoveSpeed;
-        //Vel.z = -MoveSpeed;
+        //standard move and slide
         Vel = MoveAndSlide(Vel, Vector3.Up);
 
     }
@@ -114,7 +125,7 @@ public class EnemyNormal : KinematicBody
         {
             IsFalling = false;
         }
-        if (Translation.DistanceTo(Player.Translation) <= AttackDistance)
+        if (GlobalTransform.origin.DistanceTo(playerModel.GlobalTransform.origin) <= AttackDistance)
         {
             TryAttack();
         }
