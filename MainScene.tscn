@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=2]
+[gd_scene load_steps=14 format=2]
 
 [ext_resource path="res://LevelObjects/Player/Character001_Normalized.tscn" type="PackedScene" id=1]
 [ext_resource path="res://LevelObjects/FloorsAndWalls/FloorTile001_Normalized.tscn" type="PackedScene" id=2]
@@ -12,6 +12,7 @@
 [ext_resource path="res://LevelObjects/FloorsAndWalls/Wall001_Normalized.tscn" type="PackedScene" id=10]
 [ext_resource path="res://LevelObjects/FloorsAndWalls/WallTransparent001_Normalized.tscn" type="PackedScene" id=11]
 [ext_resource path="res://UI/UI.tscn" type="PackedScene" id=12]
+[ext_resource path="res://LevelObjects/Enemies/EnemyNormal001_Normalized.tscn" type="PackedScene" id=13]
 
 [node name="MainScene" type="Spatial"]
 
@@ -240,7 +241,7 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0, 2 )
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, 2 )
 
 [node name="Character001_Normalized" parent="." instance=ExtResource( 1 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 0, 0.5 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 1 )
 
 [node name="Walls" type="Spatial" parent="."]
 
@@ -475,3 +476,14 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 0, -1 )
 
 [node name="WallTransparent001_Normalized38" parent="Walls/BackWalls" instance=ExtResource( 11 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 0, 8 )
+
+[node name="Enemies" type="Spatial" parent="."]
+
+[node name="EnemyNormal001_Normalized" parent="Enemies" instance=ExtResource( 13 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0, 4 )
+
+[node name="EnemyNormal001_Normalized2" parent="Enemies" instance=ExtResource( 13 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, 6 )
+
+[node name="EnemyNormal001_Normalized3" parent="Enemies" instance=ExtResource( 13 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0, 1 )
