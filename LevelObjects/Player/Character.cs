@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using System.Collections.Generic;
 
 public class Character : KinematicBody
 {
@@ -12,7 +13,7 @@ public class Character : KinematicBody
     private float MaxHP = 10f;
     private float Damage = 1f;
     public float Gold = 0f;
-    private TimeSpan AttackRate = TimeSpan.FromSeconds(1f);
+    private TimeSpan AttackRate = TimeSpan.FromSeconds(0.5f);
     private DateTime LastAttackTime;
     private float MoveSpeed = 1.5f;
     private float RunSpeedModifier = 2f;
@@ -33,6 +34,7 @@ public class Character : KinematicBody
     private AnimationPlayer SwordAnimator;
     private bool WeaponDamageDealt = false;
     private Spatial model;
+    public static Random Rand = new Random();
 
     public override void _Ready()
     {
@@ -144,14 +146,12 @@ public class Character : KinematicBody
         SwordAnimator.Stop();
         WeaponDamageDealt = false;
         LastAttackTime = DateTime.Now;
-        if (GD.RandRange(1, 100) > 50)
-        {
-            SwordAnimator.Play("Attack1");
-        }
-        else
-        {
-            SwordAnimator.Play("Attack2");
-        }
+        List<string> Animations = new List<string>();
+        Animations.Add("Attack1");
+        Animations.Add("Attack2");
+        Animations.Add("Attack3");
+        var currentAttackAnimation = Animations[Rand.Next(Animations.Count)];
+        SwordAnimator.Play(currentAttackAnimation);
         return true;
     }
     // Called every frame. 'delta' is the elapsed time since the previous frame.

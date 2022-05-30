@@ -53,19 +53,25 @@ surfaces/0 = {
 transform = Transform( 0.6, 0, 0, 0, -0.391902, 0.454327, 0, -0.454327, -0.391902, 0, 0, 0 )
 
 [node name="Amenoma Kageuchi_mesh001_Amenoma Kageuchi_0" type="MeshInstance" parent="."]
-transform = Transform( 7.54979e-08, 3.30988e-08, 1, 0, 1, -3.30988e-08, -1, 2.49889e-15, 7.54979e-08, 0, 0, 0 )
+transform = Transform( 7.54979e-08, 3.30988e-08, 1, 0, 1, -3.30988e-08, -1, 0, 7.54979e-08, -1.79503, 1.21075, -0.0406219 )
 mesh = SubResource( 1 )
 skeleton = NodePath("")
 material/0 = null
 
 [node name="Amenoma Kageuchi_mesh001_acc007_0" type="MeshInstance" parent="."]
-transform = Transform( 7.54979e-08, 3.30988e-08, 1, 0, 1, -3.30988e-08, -1, 2.49889e-15, 7.54979e-08, 0, 0, 0 )
+transform = Transform( 7.54979e-08, 3.30988e-08, 1, 0, 1, -3.30988e-08, -1, 0, 7.54979e-08, -1.79503, 1.21075, -0.0406219 )
 mesh = SubResource( 2 )
 skeleton = NodePath("")
 material/0 = null
 
 [node name="Amenoma Kageuchi_mesh001_Outline_0" type="MeshInstance" parent="."]
-transform = Transform( 7.54979e-08, 3.30988e-08, 1, 0, 1, -3.30988e-08, -1, 2.49889e-15, 7.54979e-08, 0, 0, 0 )
+transform = Transform( 7.54979e-08, 3.30988e-08, 1, 0, 1, -3.30988e-08, -1, 0, 7.54979e-08, -1.79503, 1.21075, -0.0406219 )
 mesh = SubResource( 3 )
 skeleton = NodePath("")
 material/0 = null
+
+[node name="AttackRayCast" type="RayCast" parent="."]
+transform = Transform( 0.999921, 0.00902746, 0.00871619, -0.00950193, 0.998384, 0.0560242, -0.00819635, -0.0561025, 0.998391, 0, 0, 0 )
+enabled = true
+cast_to = Vector3( 0, -11, 0 )
+debug_shape_thickness = 1
