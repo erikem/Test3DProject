@@ -14,7 +14,7 @@ public class EnemyNormal : KinematicBody
     private float AttackDistance = 1.5f;
     private TimeSpan AttackRate = TimeSpan.FromSeconds(1.5f);
     private DateTime LastAttackTime;
-    private float MoveSpeed = 1f;
+    private float MoveSpeed = 0.1f;
     private float Gravity = 6;
     private Vector3 Vel;
     private RayCast AttackRayCast;
@@ -80,7 +80,7 @@ public class EnemyNormal : KinematicBody
 
     public void Die()
     {
-        QueueFree();
+        myRoot.QueueFree();
     }
 
     public bool TryAttack()

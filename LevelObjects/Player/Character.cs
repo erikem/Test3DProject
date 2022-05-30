@@ -9,6 +9,7 @@ public class Character : KinematicBody
     // private string b = "text";
 
     // Called when the node enters the scene tree for the first time.
+    public static Random Rand = new Random();
     private float CurrentHP = 10f;
     private float MaxHP = 10f;
     private float Damage = 1f;
@@ -34,7 +35,10 @@ public class Character : KinematicBody
     private AnimationPlayer SwordAnimator;
     private bool WeaponDamageDealt = false;
     private Spatial model;
-    public static Random Rand = new Random();
+    private Spatial enemiesContainer;
+    private Godot.Collections.Array allEnemies;
+    private KinematicBody lockOnTrarget = null;
+
 
     public override void _Ready()
     {
@@ -44,6 +48,8 @@ public class Character : KinematicBody
         AttackRayCast = GetNode("Model/Container/SwordController/Sword/AttackRayCast") as RayCast;
         RegenTimer = GetNode("RegenTimer") as Timer;
         model = GetNode("Model") as Spatial;
+        enemiesContainer = GetNode("/root/MainScene/Enemies") as Spatial;
+        //allEnemies = enemiesContainer.GetChildren();
         RegenTimer.WaitTime = RegenFrequency;
         RegenTimer.Start();
         SwordAnimator = GetNode("Model/Container/SwordController/SwordAnimator") as AnimationPlayer;
@@ -100,11 +106,65 @@ public class Character : KinematicBody
         {
             //this line makes sure that player always move in expected direction regardless of PlayerAttachedCameraController y rotation.It basically rotates the Vel vector to match teh rotation of teh camera
             Vel = Vel.Rotated(new Vector3(0, 1, 0), PlayerCameraController.Rotation.y);
-            //GD.Print(new Vector2(Vel.x, -Vel.z).Angle());
-            //these lines rotate the model of teh chaarcter and his sword to match the moevement direction. This is done by rotatin Model spatial that does not contain either KinematicBody or Camera
-            var rot = new Vector2(-Vel.x, -Vel.z).Angle() + Mathf.Deg2Rad(90) + model.Rotation.y;
-            model.Transform = model.Transform.Rotated(new Vector3(0, 1, 0), -rot);
 
+            //rotates to the direction of movement only if we don't target specific enemt (right mouse button by default)
+            if (!Input.IsActionPressed("FocusTarget"))
+            {
+                //these lines rotate the model of teh chaarcter and his sword to match the moevement direction. This is done by rotatin Model spatial that does not contain either KinematicBody or Camera
+                var rot = new Vector2(-Vel.x, -Vel.z).Angle() + Mathf.Deg2Rad(90) + model.Rotation.y;
+                model.Transform = model.Transform.Rotated(new Vector3(0, 1, 0), -rot);
+            }
+
+        }
+        //following code is to target (face) closes enemy if such enemy exists and if player preses FocusTarget action (right mouse button by default)
+        if (enemiesContainer.GetChildren().Count > 0 && Input.IsActionPressed("FocusTarget"))
+        {
+            //we check if player is already locking onto some target
+            //We don't want the lock to switch rapidly as enemies change places thus we ensure that while player holds the button he keep targeting the same enemy until either player releases button or enemy dies
+            if (!IsInstanceValid(lockOnTrarget) || lockOnTrarget == null)
+            {
+                //we cycle all enemies that are a children of Mainscene/Enemies and find the closest one
+                allEnemies = enemiesContainer.GetChildren();
+                float currentDistance = float.MaxValue;
+                int currentIndex = 0;
+                //GD.Print(allEnemies.Count);
+                for (int i = 0; i < allEnemies.Count; i++)
+                {
+                    if (!IsInstanceValid(allEnemies[i] as Spatial))
+                    {
+                        continue;
+                    }
+                    var enemy = ((Spatial)allEnemies[i]).GetNode("Container/EnemyNormal") as KinematicBody;
+                    float dist = GlobalTransform.origin.DistanceTo(enemy.GlobalTransform.origin);
+                    //GD.Print(i + ": " + dist);
+                    if (dist <= currentDistance)
+                    {
+                        currentDistance = dist;
+                        currentIndex = i;
+                    }
+                }
+                //GD.Print(currentIndex);
+                //we sent the found enemy as our LockOn target
+                lockOnTrarget = ((Spatial)allEnemies[currentIndex]).GetNode("Container/EnemyNormal") as KinematicBody;
+            }
+            //just in case something is wrong with our selected target we do the null and validity check again
+            //probably would be better to let it throw exception and handle the root cause but not in this proto
+            if (IsInstanceValid(lockOnTrarget) && lockOnTrarget != null)
+            {
+                //we determine look direction
+                var LookDirection = lockOnTrarget.GlobalTransform.origin;
+                //setting Y value of look direction to Translation.y to make sure that player doesn't make weird turns when jumping
+                LookDirection.y = Translation.y;
+                //Trying to look at enemy but failing because we are looking 180 degress other way
+                model.LookAt(LookDirection, Vector3.Up);
+                //compensating 180 degree turn
+                model.RotateObjectLocal(Vector3.Up, Mathf.Pi);
+            }
+        }
+        else
+        {
+            //we set LockOn target to null once player releases button of if there are no more enemies left on scene
+            lockOnTrarget = null;
         }
         Vel = MoveAndSlide(Vel, Vector3.Up);
 
@@ -188,6 +248,7 @@ public class Character : KinematicBody
         if (SwordAnimator.IsPlaying()
         && !WeaponDamageDealt
         && AttackRayCast.IsColliding()
+        //such a hack!
         && AttackRayCast.GetCollider().GetType().ToString() == "EnemyNormal")
         {
             (AttackRayCast.GetCollider() as EnemyNormal).ReceiveDamage(Damage);
