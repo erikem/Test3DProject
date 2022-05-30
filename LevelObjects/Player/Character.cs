@@ -14,7 +14,8 @@ public class Character : KinematicBody
     private float MaxHP = 10f;
     private float Damage = 1f;
     public float Gold = 0f;
-    private TimeSpan AttackRate = TimeSpan.FromSeconds(0.5f);
+    private TimeSpan CurrentAttackDelay = TimeSpan.FromSeconds(0.5f);
+    SortedList<string, float> DelaysByAttackDict;
     private DateTime LastAttackTime;
     private float MoveSpeed = 1.5f;
     private float RunSpeedModifier = 2f;
@@ -38,6 +39,10 @@ public class Character : KinematicBody
     private Spatial enemiesContainer;
     private Godot.Collections.Array allEnemies;
     private KinematicBody lockOnTrarget = null;
+    private float moveTowardsThreshold = 15f;
+    private float moveBackwardsThreshold = 165f;
+    private bool MovingTowardsTarget = false;
+    private bool MovingBackwardsFromTarget = false;
 
 
     public override void _Ready()
@@ -57,10 +62,19 @@ public class Character : KinematicBody
         PlayerUI.UpdateHealthBar(CurrentHP, MaxHP);
         PlayerUI.UpdateGoldText(Gold);
         LastAttackTime = DateTime.MinValue;
+        DelaysByAttackDict = new SortedList<string, float>();
+        DelaysByAttackDict["Attack1"] = 0.75f;
+        DelaysByAttackDict["Attack2"] = 0.75f;
+        DelaysByAttackDict["Attack3"] = 0.75f;
+        DelaysByAttackDict["Lunge"] = 1f;
+        DelaysByAttackDict["Rising"] = 1f;
+
 
     }
     public override void _PhysicsProcess(float delta)
     {
+        MovingTowardsTarget = false;
+        MovingBackwardsFromTarget = false;
         Vel.x = 0;
         Vel.z = 0;
         Vector3 input = new Vector3();
@@ -136,6 +150,7 @@ public class Character : KinematicBody
                     }
                     var enemy = ((Spatial)allEnemies[i]).GetNode("Container/EnemyNormal") as KinematicBody;
                     float dist = GlobalTransform.origin.DistanceTo(enemy.GlobalTransform.origin);
+
                     //GD.Print(i + ": " + dist);
                     if (dist <= currentDistance)
                     {
@@ -159,7 +174,19 @@ public class Character : KinematicBody
                 model.LookAt(LookDirection, Vector3.Up);
                 //compensating 180 degree turn
                 model.RotateObjectLocal(Vector3.Up, Mathf.Pi);
+                float movementToTargetAngle = Mathf.Rad2Deg(Vel.AngleTo(lockOnTrarget.GlobalTransform.origin - GlobalTransform.origin));
+                //GD.Print(Mathf.Rad2Deg(movementToTargetAngle));
+                if (movementToTargetAngle < moveTowardsThreshold)
+                {
+                    MovingTowardsTarget = true;
+                }
+                else if (movementToTargetAngle > moveBackwardsThreshold)
+                {
+                    MovingBackwardsFromTarget = true;
+                }
+
             }
+
         }
         else
         {
@@ -199,19 +226,30 @@ public class Character : KinematicBody
     public bool TryAttack()
     {
 
-        if (DateTime.Now - LastAttackTime < AttackRate)
+        if (DateTime.Now - LastAttackTime < CurrentAttackDelay)
         {
             return false;
         }
         SwordAnimator.Stop();
         WeaponDamageDealt = false;
         LastAttackTime = DateTime.Now;
-        List<string> Animations = new List<string>();
-        Animations.Add("Attack1");
-        Animations.Add("Attack2");
-        Animations.Add("Attack3");
-        var currentAttackAnimation = Animations[Rand.Next(Animations.Count)];
-        SwordAnimator.Play(currentAttackAnimation);
+        if (MovingTowardsTarget)
+        {
+            CurrentAttackDelay = TimeSpan.FromSeconds(DelaysByAttackDict["Lunge"]);
+            SwordAnimator.Play("Lunge");
+        }
+        else
+        {
+            List<string> Animations = new List<string>();
+            Animations.Add("Attack1");
+            Animations.Add("Attack2");
+            Animations.Add("Attack3");
+            var currentAttackAnimation = Animations[Rand.Next(Animations.Count)];
+            CurrentAttackDelay = TimeSpan.FromSeconds(DelaysByAttackDict[currentAttackAnimation]);
+            SwordAnimator.Play(currentAttackAnimation);
+        }
+
+
         return true;
     }
     // Called every frame. 'delta' is the elapsed time since the previous frame.

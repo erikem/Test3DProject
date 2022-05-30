@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=2]
+[gd_scene load_steps=26 format=2]
 
 [ext_resource path="res://sketchfab/scifi_ninja/scifiguy_helm_quickrig_hands_0001metal1SG.material" type="Material" id=1]
 [ext_resource path="res://sketchfab/scifi_ninja/scifiguy_helm_quickrig_hands_0001phong2SG.material" type="Material" id=2]
@@ -137,6 +137,7 @@ surfaces/0 = {
 
 [sub_resource type="Animation" id=10]
 resource_name = "Attack1"
+length = 0.5
 step = 0.0333333
 tracks/0/type = "value"
 tracks/0/path = NodePath("Sword:transform")
@@ -145,7 +146,7 @@ tracks/0/loop_wrap = true
 tracks/0/imported = false
 tracks/0/enabled = true
 tracks/0/keys = {
-"times": PoolRealArray( -0.0333333, 0, 0.166667, 0.466667, 1 ),
+"times": PoolRealArray( -0.0333333, 0, 0.1, 0.233333, 0.5 ),
 "transitions": PoolRealArray( 1, 1, 1, 1, 1 ),
 "update": 0,
 "values": [ Transform( 0.6, 0, 0, 0, -0.391902, 0.454327, 0, -0.454327, -0.391902, -1.64378, 3.75994, 0.139512 ), Transform( 0.6, 0, 0, 0, -0.391902, 0.454327, 0, -0.454327, -0.391902, -1.64378, 3.75994, 0.139512 ), Transform( 0.336354, 0.174862, -0.465069, 0.202039, -0.561221, -0.0648925, -0.453923, -0.120226, -0.373497, -1.64378, 3.75994, 0.139512 ), Transform( 0.429365, -0.418431, 0.0236926, 0.165144, 0.200093, 0.541009, -0.385193, -0.380629, 0.258357, -1.64378, 3.75994, 0.139512 ), Transform( 0.6, 0, 0, 0, -0.391902, 0.454327, 0, -0.454327, -0.391902, -1.64378, 3.75994, 0.139512 ) ]
@@ -153,6 +154,7 @@ tracks/0/keys = {
 
 [sub_resource type="Animation" id=12]
 resource_name = "Attack2"
+length = 0.5
 step = 0.0333333
 tracks/0/type = "value"
 tracks/0/path = NodePath("Sword:transform")
@@ -161,7 +163,7 @@ tracks/0/loop_wrap = true
 tracks/0/imported = false
 tracks/0/enabled = true
 tracks/0/keys = {
-"times": PoolRealArray( 0, 0.2, 0.5, 1 ),
+"times": PoolRealArray( 0, 0.2, 0.366667, 0.5 ),
 "transitions": PoolRealArray( 1, 1, 1, 1 ),
 "update": 0,
 "values": [ Transform( 0.6, 0, 0, 0, -0.391902, 0.454327, 0, -0.454327, -0.391902, -1.64378, 3.75994, 0.139512 ), Transform( -0.00498097, 0.34589, -0.49024, 0.599844, -0.00752778, -0.0114059, -0.012726, -0.490207, -0.345738, -1.64378, 3.75994, 0.139512 ), Transform( -0.00498099, -0.567462, -0.194839, 0.599844, -0.0088428, 0.0104195, -0.012726, -0.194702, 0.567388, -1.64378, 3.75994, 0.139512 ), Transform( 0.6, 0, 0, 0, -0.391902, 0.454327, 0, -0.454327, -0.391902, -1.64378, 3.75994, 0.139512 ) ]
@@ -169,7 +171,8 @@ tracks/0/keys = {
 
 [sub_resource type="Animation" id=13]
 resource_name = "Attack3"
-step = 0.0333333
+length = 0.666667
+step = 0.0666667
 tracks/0/type = "value"
 tracks/0/path = NodePath("Sword:transform")
 tracks/0/interp = 1
@@ -177,10 +180,27 @@ tracks/0/loop_wrap = true
 tracks/0/imported = false
 tracks/0/enabled = true
 tracks/0/keys = {
-"times": PoolRealArray( 0, 0.233333, 0.466667, 1 ),
+"times": PoolRealArray( 0, 0.133333, 0.4, 0.666667 ),
 "transitions": PoolRealArray( 1, 1, 1, 1 ),
 "update": 0,
 "values": [ Transform( 0.6, 0, 0, 0, -0.391902, 0.454327, 0, -0.454327, -0.391902, -1.64378, 3.75994, 0.139512 ), Transform( 0.443069, -0.303659, 0.26736, -0.275639, -0.516796, -0.130174, 0.296165, -0.026698, -0.521127, 1.548, 3.75994, 0.139512 ), Transform( 0.186639, 0.467105, 0.327076, -0.411659, -0.127776, 0.417385, 0.394592, -0.35424, 0.280733, 1.548, 3.75994, 0.139512 ), Transform( 0.6, 0, 0, 0, -0.391902, 0.454327, 0, -0.454327, -0.391902, -1.64378, 3.75994, 0.139512 ) ]
+}
+
+[sub_resource type="Animation" id=15]
+resource_name = "Lunge"
+length = 0.266667
+step = 0.0666667
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sword:transform")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.2, 0.266667 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ Transform( 0.6, 0, 0, 0, -0.391902, 0.454327, 0, -0.454327, -0.391902, -1.64378, 3.75994, 0.139512 ), Transform( 0.6, 0, 0, 0, -0.0130472, 0.599858, 0, -0.599858, -0.0130472, 0.452425, 4.25966, 8.27855 ), Transform( 0.6, 0, 0, 0, -0.391902, 0.454327, 0, -0.454327, -0.391902, -1.64378, 3.75994, 0.139512 ) ]
 }
 
 [sub_resource type="Animation" id=11]
@@ -196,6 +216,22 @@ tracks/0/keys = {
 "transitions": PoolRealArray( 1 ),
 "update": 0,
 "values": [ Transform( 0.6, 0, 0, 0, -0.391902, 0.454327, 0, -0.454327, -0.391902, -1.64378, 3.75994, 0.139512 ) ]
+}
+
+[sub_resource type="Animation" id=14]
+resource_name = "Rising"
+step = 0.0333333
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sword:transform")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.166667, 0.466667, 1 ),
+"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"update": 0,
+"values": [ Transform( 0.6, 0, 0, 0, -0.391902, 0.454327, 0, -0.454327, -0.391902, -1.64378, 3.75994, 0.139512 ), Transform( -0.591827, -0.097423, -0.0158125, -0.033889, 0.290868, -0.523687, 0.0926974, -0.51566, -0.292408, -1.64378, 3.75994, 0.139512 ), Transform( -0.570332, -0.168865, -0.0787763, 0.161643, -0.322175, -0.479662, 0.0926974, -0.477167, 0.351737, 1.58611, 8.79575, 2.34757 ), Transform( 0.6, 0, 0, 0, -0.391902, 0.454327, 0, -0.454327, -0.391902, -1.64378, 3.75994, 0.139512 ) ]
 }
 
 [node name="Character001_Normalized" type="Spatial"]
@@ -271,11 +307,12 @@ material/0 = null
 transform = Transform( 0.6, 0, 0, 0, -0.391902, 0.454327, 0, -0.454327, -0.391902, -1.64378, 3.75994, 0.139512 )
 
 [node name="SwordAnimator" type="AnimationPlayer" parent="PlayerCharacter/Model/Container/SwordController"]
-playback_speed = 2.0
 anims/Attack1 = SubResource( 10 )
 anims/Attack2 = SubResource( 12 )
 anims/Attack3 = SubResource( 13 )
+anims/Lunge = SubResource( 15 )
 anims/RESET = SubResource( 11 )
+anims/Rising = SubResource( 14 )
 
 [node name="RegenTimer" type="Timer" parent="PlayerCharacter"]
 
