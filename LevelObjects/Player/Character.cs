@@ -14,7 +14,7 @@ public class Character : KinematicBody
     public float Gold = 0f;
     private TimeSpan AttackRate = TimeSpan.FromSeconds(1f);
     private DateTime LastAttackTime;
-    private float MoveSpeed = 15f;
+    private float MoveSpeed = 1.5f;
     private float RunSpeedModifier = 2f;
     private float JumpForce = 5;
     private float Gravity = 10;
@@ -39,12 +39,12 @@ public class Character : KinematicBody
         Vel = new Vector3();
         PlayerCamera = GetNode("PlayerAttachedCameraController/PlayerCamera") as Camera;
         PlayerCameraController = GetNode("PlayerAttachedCameraController") as Spatial;
-        AttackRayCast = GetNode("Model/SwordController/Sword/AttackRayCast") as RayCast;
+        AttackRayCast = GetNode("Model/Container/SwordController/Sword/AttackRayCast") as RayCast;
         RegenTimer = GetNode("RegenTimer") as Timer;
         model = GetNode("Model") as Spatial;
         RegenTimer.WaitTime = RegenFrequency;
         RegenTimer.Start();
-        SwordAnimator = GetNode("Model/SwordController/SwordAnimator") as AnimationPlayer;
+        SwordAnimator = GetNode("Model/Container/SwordController/SwordAnimator") as AnimationPlayer;
         PlayerUI = GetNode("/root/MainScene/UICanvas/UI") as UI;
         PlayerUI.UpdateHealthBar(CurrentHP, MaxHP);
         PlayerUI.UpdateGoldText(Gold);

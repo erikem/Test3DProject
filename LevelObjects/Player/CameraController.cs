@@ -16,7 +16,7 @@ public class CameraController : Spatial
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {
-        myCamera = GetNode("Camera") as Camera;
+        myCamera = GetNode("PlayerCamera") as Camera;
         //myCamera.ClearCurrent();
         //player = GetParent() as KinematicBody;
         Input.SetMouseMode(Input.MouseMode.Captured);
