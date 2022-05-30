@@ -16,10 +16,11 @@ public class Character : KinematicBody
     private DateTime LastAttackTime;
     private float MoveSpeed = 15f;
     private float RunSpeedModifier = 2f;
-    private float JumpForce = 30;
-    private float Gravity = 60;
+    private float JumpForce = 5;
+    private float Gravity = 10;
     private Vector3 Vel;
     private Camera PlayerCamera;
+    private Spatial PlayerCameraController;
     private RayCast AttackRayCast;
     private float RegenAmount = 1f;
     private float RegenFrequency = 10f;
@@ -37,6 +38,7 @@ public class Character : KinematicBody
     {
         Vel = new Vector3();
         PlayerCamera = GetNode("PlayerAttachedCameraController/PlayerCamera") as Camera;
+        PlayerCameraController = GetNode("PlayerAttachedCameraController") as Spatial;
         AttackRayCast = GetNode("Model/SwordController/Sword/AttackRayCast") as RayCast;
         RegenTimer = GetNode("RegenTimer") as Timer;
         model = GetNode("Model") as Spatial;
@@ -51,7 +53,6 @@ public class Character : KinematicBody
     }
     public override void _PhysicsProcess(float delta)
     {
-        int degreeToTurn = 0;
         Vel.x = 0;
         Vel.z = 0;
         Vector3 input = new Vector3();
@@ -90,20 +91,15 @@ public class Character : KinematicBody
                 DoubleJumpExecuted = true;
             }
             Vel.y = JumpForce;
-            GD.Print("Now character has this many gold: <" + Gold.ToString() + ">");
+            //GD.Print("Now character has this many gold pieces: <" + Gold.ToString() + ">");
         }
 
         if (direction.x != 0 || direction.z != 0)
         {
-            //GD.Print(direction.x + ", " + direction.z);
-            //Rotation.x = 0;
-            //model.LookAt(direction, Vector3.Up);
-            //var lookAngle = new Vector3(Vel.x, 1, -Vel.z);
-            //LookAt(lookAngle, Vector3.Up);
-            //var angle = Math.Atan2(Vel.x, Vel.z);
-            //model.Rotate(new Vector3(0, 1, 0), new Vector2(Vel.x, -Vel.z).Angle());
-            //LookAt(Transform.origin + Vel, Vector3.Up);
-            GD.Print(new Vector2(Vel.x, -Vel.z).Angle());
+            //this line makes sure that player always move in expected direction regardless of PlayerAttachedCameraController y rotation.It basically rotates the Vel vector to match teh rotation of teh camera
+            Vel = Vel.Rotated(new Vector3(0, 1, 0), PlayerCameraController.Rotation.y);
+            //GD.Print(new Vector2(Vel.x, -Vel.z).Angle());
+            //these lines rotate the model of teh chaarcter and his sword to match the moevement direction. This is done by rotatin Model spatial that does not contain either KinematicBody or Camera
             var rot = new Vector2(-Vel.x, -Vel.z).Angle() + Mathf.Deg2Rad(90) + model.Rotation.y;
             model.Transform = model.Transform.Rotated(new Vector3(0, 1, 0), -rot);
 

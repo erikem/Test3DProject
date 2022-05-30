@@ -203,6 +203,7 @@ collision_mask = 3
 script = ExtResource( 6 )
 
 [node name="PlayerAttachedCameraController" type="Spatial" parent="PlayerCharacter"]
+transform = Transform( 0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, 0, 0, 0 )
 script = ExtResource( 7 )
 
 [node name="PlayerCamera" type="Camera" parent="PlayerCharacter/PlayerAttachedCameraController"]
