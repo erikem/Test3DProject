@@ -1,0 +1,15 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://LevelObjects/Props/Flower003_Normalized.tscn" type="PackedScene" id=2]
+[ext_resource path="res://LevelObjects/Props/Grass003_Normalized.tscn" type="PackedScene" id=6]
+
+[node name="PropGroupType001" type="Spatial"]
+
+[node name="Grass003_Normalized" parent="." instance=ExtResource( 6 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.426815, 0, 0.191916 )
+
+[node name="Flower003_Normalized" parent="." instance=ExtResource( 2 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.18666, 1.01328e-06, 0.71168 )
+
+[node name="Flower003_Normalized4" parent="." instance=ExtResource( 2 )]
+transform = Transform( 0.980471, 0, 0.196665, 0, 1, 0, -0.196665, 0, 0.980471, 0.624354, 1.01328e-06, 0.156939 )

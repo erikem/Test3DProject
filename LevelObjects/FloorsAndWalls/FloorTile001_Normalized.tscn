@@ -7,7 +7,7 @@ extents = Vector3( 0.5, 0.5, 0.5 )
 
 [sub_resource type="CubeMesh" id=2]
 
-[node name="FloorTile001_Normalize" type="Spatial"]
+[node name="FloorTile001_Normalized" type="Spatial"]
 
 [node name="Container" type="Spatial" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, -0.5, 0.5 )

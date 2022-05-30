@@ -38,6 +38,7 @@ __meta__ = {
 
 [node name="Object_2" type="MeshInstance" parent="StaticBody/Floor0/Front"]
 transform = Transform( 0.007, 0, 0, 0, -3.0598e-10, 0.007, 0, -0.007, -3.0598e-10, 0.486645, 0.431912, -0.0826809 )
+cast_shadow = 0
 mesh = SubResource( 1 )
 skeleton = NodePath("")
 material/0 = null
@@ -50,6 +51,7 @@ __meta__ = {
 
 [node name="Object_2" type="MeshInstance" parent="StaticBody/Floor0/Back"]
 transform = Transform( -0.007, 6.1196e-10, 2.67496e-17, 0, -3.0598e-10, 0.007, 6.1196e-10, 0.007, 3.0598e-10, 0.486645, 0.431912, 0.173106 )
+cast_shadow = 0
 mesh = SubResource( 1 )
 skeleton = NodePath("")
 material/0 = null
@@ -62,6 +64,7 @@ __meta__ = {
 
 [node name="Object_2" type="MeshInstance" parent="StaticBody/Floor0/Right"]
 transform = Transform( -0.007, 6.1196e-10, 2.67496e-17, 0, -3.0598e-10, 0.007, 6.1196e-10, 0.007, 3.0598e-10, 0.486645, 0.431912, 0.173106 )
+cast_shadow = 0
 mesh = SubResource( 1 )
 skeleton = NodePath("")
 material/0 = null
@@ -74,6 +77,7 @@ __meta__ = {
 
 [node name="Object_2" type="MeshInstance" parent="StaticBody/Floor0/Left"]
 transform = Transform( -0.007, 6.1196e-10, 2.67496e-17, 0, -3.0598e-10, 0.007, 6.1196e-10, 0.007, 3.0598e-10, 0.486645, 0.431912, 0.173106 )
+cast_shadow = 0
 mesh = SubResource( 1 )
 skeleton = NodePath("")
 material/0 = null
@@ -89,6 +93,7 @@ __meta__ = {
 
 [node name="Object_2" type="MeshInstance" parent="StaticBody/Floor1/Front"]
 transform = Transform( 0.007, 0, 0, 0, -3.0598e-10, 0.007, 0, -0.007, -3.0598e-10, 0.486645, 0.431912, -0.0826809 )
+cast_shadow = 0
 mesh = SubResource( 1 )
 skeleton = NodePath("")
 material/0 = null
@@ -101,6 +106,7 @@ __meta__ = {
 
 [node name="Object_2" type="MeshInstance" parent="StaticBody/Floor1/Back"]
 transform = Transform( -0.007, 6.1196e-10, 2.67496e-17, 0, -3.0598e-10, 0.007, 6.1196e-10, 0.007, 3.0598e-10, 0.486645, 0.431912, 0.173106 )
+cast_shadow = 0
 mesh = SubResource( 1 )
 skeleton = NodePath("")
 material/0 = null
@@ -113,6 +119,7 @@ __meta__ = {
 
 [node name="Object_2" type="MeshInstance" parent="StaticBody/Floor1/Right"]
 transform = Transform( -0.007, 6.1196e-10, 2.67496e-17, 0, -3.0598e-10, 0.007, 6.1196e-10, 0.007, 3.0598e-10, 0.486645, 0.431912, 0.173106 )
+cast_shadow = 0
 mesh = SubResource( 1 )
 skeleton = NodePath("")
 material/0 = null
@@ -125,6 +132,7 @@ __meta__ = {
 
 [node name="Object_2" type="MeshInstance" parent="StaticBody/Floor1/Left"]
 transform = Transform( -0.007, 6.1196e-10, 2.67496e-17, 0, -3.0598e-10, 0.007, 6.1196e-10, 0.007, 3.0598e-10, 0.486645, 0.431912, 0.173106 )
+cast_shadow = 0
 mesh = SubResource( 1 )
 skeleton = NodePath("")
 material/0 = null
@@ -140,6 +148,7 @@ __meta__ = {
 
 [node name="Object_2" type="MeshInstance" parent="StaticBody/Floor2/Front"]
 transform = Transform( 0.007, 0, 0, 0, -3.0598e-10, 0.007, 0, -0.007, -3.0598e-10, 0.486645, 0.431912, -0.0826809 )
+cast_shadow = 0
 mesh = SubResource( 1 )
 skeleton = NodePath("")
 material/0 = null
@@ -152,6 +161,7 @@ __meta__ = {
 
 [node name="Object_2" type="MeshInstance" parent="StaticBody/Floor2/Back"]
 transform = Transform( -0.007, 6.1196e-10, 2.67496e-17, 0, -3.0598e-10, 0.007, 6.1196e-10, 0.007, 3.0598e-10, 0.486645, 0.431912, 0.173106 )
+cast_shadow = 0
 mesh = SubResource( 1 )
 skeleton = NodePath("")
 material/0 = null
@@ -164,6 +174,7 @@ __meta__ = {
 
 [node name="Object_2" type="MeshInstance" parent="StaticBody/Floor2/Right"]
 transform = Transform( -0.007, 6.1196e-10, 2.67496e-17, 0, -3.0598e-10, 0.007, 6.1196e-10, 0.007, 3.0598e-10, 0.486645, 0.431912, 0.173106 )
+cast_shadow = 0
 mesh = SubResource( 1 )
 skeleton = NodePath("")
 material/0 = null
@@ -176,6 +187,7 @@ __meta__ = {
 
 [node name="Object_2" type="MeshInstance" parent="StaticBody/Floor2/Left"]
 transform = Transform( -0.007, 6.1196e-10, 2.67496e-17, 0, -3.0598e-10, 0.007, 6.1196e-10, 0.007, 3.0598e-10, 0.486645, 0.431912, 0.173106 )
+cast_shadow = 0
 mesh = SubResource( 1 )
 skeleton = NodePath("")
 material/0 = null
@@ -191,6 +203,7 @@ __meta__ = {
 
 [node name="Object_2" type="MeshInstance" parent="StaticBody/Floor3/Front"]
 transform = Transform( 0.007, 0, 0, 0, -3.0598e-10, 0.007, 0, -0.007, -3.0598e-10, 0.486645, 0.431912, -0.0826809 )
+cast_shadow = 0
 mesh = SubResource( 1 )
 skeleton = NodePath("")
 material/0 = null
@@ -203,6 +216,7 @@ __meta__ = {
 
 [node name="Object_2" type="MeshInstance" parent="StaticBody/Floor3/Back"]
 transform = Transform( -0.007, 6.1196e-10, 2.67496e-17, 0, -3.0598e-10, 0.007, 6.1196e-10, 0.007, 3.0598e-10, 0.486645, 0.431912, 0.173106 )
+cast_shadow = 0
 mesh = SubResource( 1 )
 skeleton = NodePath("")
 material/0 = null
@@ -215,6 +229,7 @@ __meta__ = {
 
 [node name="Object_2" type="MeshInstance" parent="StaticBody/Floor3/Right"]
 transform = Transform( -0.007, 6.1196e-10, 2.67496e-17, 0, -3.0598e-10, 0.007, 6.1196e-10, 0.007, 3.0598e-10, 0.486645, 0.431912, 0.173106 )
+cast_shadow = 0
 mesh = SubResource( 1 )
 skeleton = NodePath("")
 material/0 = null
@@ -227,6 +242,7 @@ __meta__ = {
 
 [node name="Object_2" type="MeshInstance" parent="StaticBody/Floor3/Left"]
 transform = Transform( -0.007, 6.1196e-10, 2.67496e-17, 0, -3.0598e-10, 0.007, 6.1196e-10, 0.007, 3.0598e-10, 0.486645, 0.431912, 0.173106 )
+cast_shadow = 0
 mesh = SubResource( 1 )
 skeleton = NodePath("")
 material/0 = null
@@ -242,6 +258,7 @@ __meta__ = {
 
 [node name="Object_2" type="MeshInstance" parent="StaticBody/Floor4/Front"]
 transform = Transform( 0.007, 0, 0, 0, -3.0598e-10, 0.007, 0, -0.007, -3.0598e-10, 0.486645, 0.431912, -0.0826809 )
+cast_shadow = 0
 mesh = SubResource( 1 )
 skeleton = NodePath("")
 material/0 = null
@@ -254,6 +271,7 @@ __meta__ = {
 
 [node name="Object_2" type="MeshInstance" parent="StaticBody/Floor4/Back"]
 transform = Transform( -0.007, 6.1196e-10, 2.67496e-17, 0, -3.0598e-10, 0.007, 6.1196e-10, 0.007, 3.0598e-10, 0.486645, 0.431912, 0.173106 )
+cast_shadow = 0
 mesh = SubResource( 1 )
 skeleton = NodePath("")
 material/0 = null
@@ -266,6 +284,7 @@ __meta__ = {
 
 [node name="Object_2" type="MeshInstance" parent="StaticBody/Floor4/Right"]
 transform = Transform( -0.007, 6.1196e-10, 2.67496e-17, 0, -3.0598e-10, 0.007, 6.1196e-10, 0.007, 3.0598e-10, 0.486645, 0.431912, 0.173106 )
+cast_shadow = 0
 mesh = SubResource( 1 )
 skeleton = NodePath("")
 material/0 = null
@@ -278,6 +297,7 @@ __meta__ = {
 
 [node name="Object_2" type="MeshInstance" parent="StaticBody/Floor4/Left"]
 transform = Transform( -0.007, 6.1196e-10, 2.67496e-17, 0, -3.0598e-10, 0.007, 6.1196e-10, 0.007, 3.0598e-10, 0.486645, 0.431912, 0.173106 )
+cast_shadow = 0
 mesh = SubResource( 1 )
 skeleton = NodePath("")
 material/0 = null
