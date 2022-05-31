@@ -15,7 +15,7 @@ public class EnemyNormal : KinematicBody
     private TimeSpan _attackRate = TimeSpan.FromSeconds(1.5f);
     private DateTime _lastAttackTime;
     private float _moveSpeed = 0.1f;
-    private float _gravity = 6;
+    private float _gravity = 10;
     private Vector3 _vel;
     private RayCast _attackRayCast;
     private bool _isFalling = false;
@@ -30,7 +30,14 @@ public class EnemyNormal : KinematicBody
     private TimeSpan _forcedDragDuration;
     private DateTime _forcedDragStarted;
     private Vector3 _forcedDragDirection;
-
+    private void ApplyForcedDrag(ForcedDrag drag)
+    {
+        _forcedDragStarted = DateTime.Now;
+        _forcedDragInProcess = true;
+        _forcedDragDirection = drag.DragVector.Normalized();
+        _forcedDragDirection = _forcedDragDirection * drag.SpeedModifier;
+        _forcedDragDuration = drag.Duration;
+    }
     public override void _Ready()
     {
         _vel = new Vector3();
@@ -60,6 +67,7 @@ public class EnemyNormal : KinematicBody
             //general direction of player
             var LookDirection = _playerModel.GlobalTransform.origin;
             //setting Y value of look direction sop that enemies don't look UP/DOWN in case player is above/belwo them
+            GD.Print(Translation.y);
             LookDirection.y = 0;
             //Trying to look at player but failing because we are looking 180 degress other way
             LookAt(LookDirection, Vector3.Up);
@@ -81,11 +89,11 @@ public class EnemyNormal : KinematicBody
 
     }
 
-    public void ReceiveDamage(float damage, Vector3 push)
+    public void ReceiveDamage(float damage, ForcedDrag drag = null)
     {
-        if (push == Vector3.Zero)
+        if (drag != null)
         {
-
+            ApplyForcedDrag(drag);
         }
         ChangeHealth(-damage);
     }

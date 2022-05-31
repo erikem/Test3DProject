@@ -1,7 +1,6 @@
 using Godot;
 using System;
 using System.Collections.Generic;
-
 public class Character : KinematicBody
 {
     // Declare member variables here. Examples:
@@ -109,13 +108,13 @@ public class Character : KinematicBody
         }
     }
 
-    private void ApplyForcedDrag(Vector3 direction, float duartion, float speed)
+    private void ApplyForcedDrag(ForcedDrag drag)
     {
         _forcedDragStarted = DateTime.Now;
         _forcedDragInProcess = true;
-        _forcedDragDirection = direction.Normalized();
-        _forcedDragDirection = _forcedDragDirection * speed;
-        _forcedDragDuration = TimeSpan.FromSeconds(duartion);
+        _forcedDragDirection = drag.DragVector.Normalized();
+        _forcedDragDirection = _forcedDragDirection * drag.SpeedModifier;
+        _forcedDragDuration = drag.Duration;
     }
 
     public override void _PhysicsProcess(float delta)
@@ -242,7 +241,7 @@ public class Character : KinematicBody
 
             if (Input.IsActionJustPressed("TestInput"))
             {
-                ApplyForcedDrag(new Vector3(0, 0, 1).Rotated(new Vector3(0, 1, 0), _model.Rotation.y), 0.2f, 2);
+                ApplyForcedDrag(new ForcedDrag(new Vector3(0, 0, 1).Rotated(new Vector3(0, 1, 0), _model.Rotation.y), 2, 0.2f));
             }
         }
         else
@@ -297,13 +296,13 @@ public class Character : KinematicBody
         {
             _currentAttackDelay = TimeSpan.FromSeconds(_delaysByAttackDict["Lunge"]);
             _swordAnimator.Play("Lunge");
-            ApplyForcedDrag(new Vector3(0, 0, 1).Rotated(new Vector3(0, 1, 0), _model.Rotation.y), 0.2f, 20);
+            ApplyForcedDrag(new ForcedDrag(new Vector3(0, 0, 1).Rotated(new Vector3(0, 1, 0), _model.Rotation.y), 20, 0.2f));
         }
         if (_movingBackwardsFromTarget && IsOnFloor())
         {
             _currentAttackDelay = TimeSpan.FromSeconds(_delaysByAttackDict["Rising"]);
             _swordAnimator.Play("Rising");
-            ApplyForcedDrag(new Vector3(0, 1, 0.1f).Rotated(new Vector3(0, 1, 0), _model.Rotation.y), 0.5f, 2.5f);
+            ApplyForcedDrag(new ForcedDrag(new Vector3(0, 1, 0.1f).Rotated(new Vector3(0, 1, 0), _model.Rotation.y), 2.5f, 0.5f));
         }
         else
         {
@@ -347,7 +346,16 @@ public class Character : KinematicBody
                 //such a hack!
                 && _attackRayCast.GetCollider().GetType().ToString() == "EnemyNormal")
         {
-            (_attackRayCast.GetCollider() as EnemyNormal).ReceiveDamage(_damage, Vector3.Zero);
+            ForcedDrag dragToTarget = null;
+            if (_swordAnimator.CurrentAnimation == "Lunge")
+            {
+
+            }
+            else if (_swordAnimator.CurrentAnimation == "Rising")
+            {
+                dragToTarget = new ForcedDrag(new Vector3(0, 1, 0.1f).Rotated(new Vector3(0, 1, 0), _model.Rotation.y), 2.5f, 0.5f);
+            }
+            (_attackRayCast.GetCollider() as EnemyNormal).ReceiveDamage(_damage, dragToTarget);
             _weaponDamageDealt = true;
         }
     }
