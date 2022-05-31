@@ -45,6 +45,7 @@ public class Character : KinematicBody
     private bool _movingBackwardsFromTarget = false;
     private bool _forcedDragEnabled = false;
     private TimeSpan _forcedDragDuration;
+    private DateTime _forcedDraStarted;
     private Vector3 _forcedDragDirection;
 
 
@@ -106,111 +107,137 @@ public class Character : KinematicBody
             return 1f;
         }
     }
+
+    private void ApplyForcedDrag(Vector3 direction, float duartion, float speed)
+    {
+        _forcedDraStarted = DateTime.Now;
+        _forcedDragEnabled = true;
+        _forcedDragDirection = direction.Normalized();
+        _forcedDragDirection = _forcedDragDirection * speed;
+        _forcedDragDuration = TimeSpan.FromSeconds(duartion);
+    }
+
     public override void _PhysicsProcess(float delta)
     {
-        //resetting key movement properties to make sure that movement stops if there's no player inout
+        //resetting key movement properties to make sure that movement stops if there's no player input
         _movingTowardsTarget = false;
         _movingBackwardsFromTarget = false;
         _vel.x = 0;
         _vel.z = 0;
-        float runSpeed = HandleSprintInput();
-        Vector3 direction = HandleMovementInput();
 
-        _vel.x = direction.x * _moveSpeed * runSpeed;
-        _vel.z = direction.z * _moveSpeed * runSpeed;
-        _vel.y -= _gravity * delta;
 
-        if (Input.IsActionJustPressed("Jump") && (IsOnFloor() || !_doubleJumpExecuted))
+
+        if (_forcedDragEnabled
+        && DateTime.Now - _forcedDraStarted >= _forcedDragDuration)
         {
-            if (!IsOnFloor())
-            {
-                _doubleJumpExecuted = true;
-            }
-            _vel.y = _jumpForce;
+            _forcedDragEnabled = false;
         }
-        if ((direction.x != 0 || direction.z != 0))
+        if (!_forcedDragEnabled)
         {
-            //this line makes sure that player always move in expected direction regardless of PlayerAttachedCameraController y rotation.It basically rotates the Vel vector to match teh rotation of teh camera
-            _vel = _vel.Rotated(new Vector3(0, 1, 0), _playerCameraController.Rotation.y);
+            float runSpeed = HandleSprintInput();
+            Vector3 direction = HandleMovementInput();
+            _vel.x = direction.x * _moveSpeed * runSpeed;
+            _vel.z = direction.z * _moveSpeed * runSpeed;
+            _vel.y -= _gravity * delta;
 
-            //rotates to the direction of movement only if we don't target specific enemt (right mouse button by default)
-            if (!Input.IsActionPressed("FocusTarget"))
+            if (Input.IsActionJustPressed("Jump") && (IsOnFloor() || !_doubleJumpExecuted))
             {
-                //these lines rotate the model of teh chaarcter and his sword to match the moevement direction. This is done by rotatin Model spatial that does not contain either KinematicBody or Camera
-                var rot = new Vector2(-_vel.x, -_vel.z).Angle() + Mathf.Deg2Rad(90) + _model.Rotation.y;
-                _model.Transform = _model.Transform.Rotated(new Vector3(0, 1, 0), -rot);
+                if (!IsOnFloor())
+                {
+                    _doubleJumpExecuted = true;
+                }
+                _vel.y = _jumpForce;
             }
-
-        }
-        //following code is to target (face) closes enemy if such enemy exists and if player preses FocusTarget action (right mouse button by default)
-        if (_enemiesContainer.GetChildren().Count > 0 && Input.IsActionPressed("FocusTarget"))
-        {
-            //we check if player is already locking onto some target
-            //We don't want the lock to switch rapidly as enemies change places thus we ensure that while player holds the button he keep targeting the same enemy until either player releases button or enemy dies
-            if (!IsInstanceValid(_lockOnTrarget) || _lockOnTrarget == null)
+            if ((direction.x != 0 || direction.z != 0))
             {
-                //we cycle all enemies that are a children of Mainscene/Enemies and find the closest one
-                _allEnemies = _enemiesContainer.GetChildren();
-                float currentDistance = float.MaxValue;
-                int currentIndex = 0;
-                for (int i = 0; i < _allEnemies.Count; i++)
-                {
-                    if (!IsInstanceValid(_allEnemies[i] as Spatial))
-                    {
-                        continue;
-                    }
-                    var enemy = ((Spatial)_allEnemies[i]).GetNode("Container/EnemyNormal") as KinematicBody;
-                    float dist = GlobalTransform.origin.DistanceTo(enemy.GlobalTransform.origin);
+                //this line makes sure that player always move in expected direction regardless of PlayerAttachedCameraController y rotation.It basically rotates the Vel vector to match teh rotation of teh camera
+                _vel = _vel.Rotated(new Vector3(0, 1, 0), _playerCameraController.Rotation.y);
 
-                    if (dist <= currentDistance)
-                    {
-                        currentDistance = dist;
-                        currentIndex = i;
-                    }
+                //rotates to the direction of movement only if we don't target specific enemt (right mouse button by default)
+                if (!Input.IsActionPressed("FocusTarget"))
+                {
+                    //these lines rotate the model of teh chaarcter and his sword to match the moevement direction. This is done by rotatin Model spatial that does not contain either KinematicBody or Camera
+                    var rot = new Vector2(-_vel.x, -_vel.z).Angle() + Mathf.Deg2Rad(90) + _model.Rotation.y;
+                    _model.Transform = _model.Transform.Rotated(new Vector3(0, 1, 0), -rot);
                 }
-                //we sent the found enemy as our LockOn target
-                _lockOnTrarget = ((Spatial)_allEnemies[currentIndex]).GetNode("Container/EnemyNormal") as KinematicBody;
+
             }
-            //just in case something is wrong with our selected target we do the null and validity check again
-            //probably would be better to let it throw exception and handle the root cause but not in this proto
-            if (IsInstanceValid(_lockOnTrarget) && _lockOnTrarget != null)
+            //following code is to target (face) closes enemy if such enemy exists and if player preses FocusTarget action (right mouse button by default)
+            if (_enemiesContainer.GetChildren().Count > 0 && Input.IsActionPressed("FocusTarget"))
             {
-                //we determine look direction
-                var LookDirection = _lockOnTrarget.GlobalTransform.origin;
-                //setting Y value of look direction to Translation.y to make sure that player doesn't make weird turns when jumping
-                LookDirection.y = Translation.y;
-                //Trying to look at enemy but failing because we are looking 180 degress other way
-                _model.LookAt(LookDirection, Vector3.Up);
-                //compensating 180 degree turn
-                _model.RotateObjectLocal(Vector3.Up, Mathf.Pi);
-                float movementToTargetAngle = Mathf.Rad2Deg(_vel.AngleTo(_lockOnTrarget.GlobalTransform.origin - GlobalTransform.origin));
-                if (movementToTargetAngle < _moveTowardsThreshold)
+                //we check if player is already locking onto some target
+                //We don't want the lock to switch rapidly as enemies change places thus we ensure that while player holds the button he keep targeting the same enemy until either player releases button or enemy dies
+                if (!IsInstanceValid(_lockOnTrarget) || _lockOnTrarget == null)
                 {
-                    _movingTowardsTarget = true;
+                    //we cycle all enemies that are a children of Mainscene/Enemies and find the closest one
+                    _allEnemies = _enemiesContainer.GetChildren();
+                    float currentDistance = float.MaxValue;
+                    int currentIndex = 0;
+                    for (int i = 0; i < _allEnemies.Count; i++)
+                    {
+                        if (!IsInstanceValid(_allEnemies[i] as Spatial))
+                        {
+                            continue;
+                        }
+                        var enemy = ((Spatial)_allEnemies[i]).GetNode("Container/EnemyNormal") as KinematicBody;
+                        float dist = GlobalTransform.origin.DistanceTo(enemy.GlobalTransform.origin);
+
+                        if (dist <= currentDistance)
+                        {
+                            currentDistance = dist;
+                            currentIndex = i;
+                        }
+                    }
+                    //we sent the found enemy as our LockOn target
+                    _lockOnTrarget = ((Spatial)_allEnemies[currentIndex]).GetNode("Container/EnemyNormal") as KinematicBody;
                 }
-                else if (movementToTargetAngle > _moveBackwardsThreshold)
+                //just in case something is wrong with our selected target we do the null and validity check again
+                //probably would be better to let it throw exception and handle the root cause but not in this proto
+                if (IsInstanceValid(_lockOnTrarget) && _lockOnTrarget != null)
                 {
-                    _movingBackwardsFromTarget = true;
+                    //we determine look direction
+                    var LookDirection = _lockOnTrarget.GlobalTransform.origin;
+                    //setting Y value of look direction to Translation.y to make sure that player doesn't make weird turns when jumping
+                    LookDirection.y = Translation.y;
+                    //Trying to look at enemy but failing because we are looking 180 degress other way
+                    _model.LookAt(LookDirection, Vector3.Up);
+                    //compensating 180 degree turn
+                    _model.RotateObjectLocal(Vector3.Up, Mathf.Pi);
+                    float movementToTargetAngle = Mathf.Rad2Deg(_vel.AngleTo(_lockOnTrarget.GlobalTransform.origin - GlobalTransform.origin));
+                    if (movementToTargetAngle < _moveTowardsThreshold)
+                    {
+                        _movingTowardsTarget = true;
+                    }
+                    else if (movementToTargetAngle > _moveBackwardsThreshold)
+                    {
+                        _movingBackwardsFromTarget = true;
+                    }
                 }
+                else
+                {
+                    //setting it to null if instance is not valid
+                    _lockOnTrarget = null;
+                }
+
             }
             else
             {
-                //setting it to null if instance is not valid
+                //we set LockOn target to null once player releases button of if there are no more enemies left on scene
                 _lockOnTrarget = null;
             }
 
+            if (Input.IsActionJustPressed("TestInput"))
+            {
+                ApplyForcedDrag(new Vector3(0, 0, 1).Rotated(new Vector3(0, 1, 0), _model.Rotation.y), 0.2f, 20);
+            }
         }
         else
         {
-            //we set LockOn target to null once player releases button of if there are no more enemies left on scene
-            _lockOnTrarget = null;
+            _vel = _forcedDragDirection;
+            _vel.y -= _gravity * delta;
+
         }
 
-        if (Input.IsActionJustPressed("TestInput"))
-        {
-            _vel = new Vector3(0, 0, 50);
-            _vel = _vel.Rotated(new Vector3(0, 1, 0), _model.Rotation.y);
-        }
 
         _vel = MoveAndSlide(_vel, Vector3.Up);
 
@@ -252,10 +279,11 @@ public class Character : KinematicBody
         _swordAnimator.Stop();
         _weaponDamageDealt = false;
         _lastAttackTime = DateTime.Now;
-        if (_movingTowardsTarget)
+        if (_movingTowardsTarget && GlobalTransform.origin.DistanceTo(_lockOnTrarget.GlobalTransform.origin) > 2)
         {
             _currentAttackDelay = TimeSpan.FromSeconds(_delaysByAttackDict["Lunge"]);
             _swordAnimator.Play("Lunge");
+            ApplyForcedDrag(new Vector3(0, 0, 1).Rotated(new Vector3(0, 1, 0), _model.Rotation.y), 0.2f, 20);
         }
         else
         {
