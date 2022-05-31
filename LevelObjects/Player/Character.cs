@@ -43,9 +43,9 @@ public class Character : KinematicBody
     private float _moveBackwardsThreshold = 165f;
     private bool _movingTowardsTarget = false;
     private bool _movingBackwardsFromTarget = false;
-    private bool _forcedDragEnabled = false;
+    private bool _forcedDragInProcess = false;
     private TimeSpan _forcedDragDuration;
-    private DateTime _forcedDraStarted;
+    private DateTime _forcedDragStarted;
     private Vector3 _forcedDragDirection;
     private bool _targetCentricControlsOrientation = false;
 
@@ -71,8 +71,8 @@ public class Character : KinematicBody
         _delaysByAttackDict["Attack1"] = 0.75f;
         _delaysByAttackDict["Attack2"] = 0.75f;
         _delaysByAttackDict["Attack3"] = 0.75f;
-        _delaysByAttackDict["Lunge"] = 1f;
-        _delaysByAttackDict["Rising"] = 1f;
+        _delaysByAttackDict["Lunge"] = 0.75f;
+        _delaysByAttackDict["Rising"] = 0.75f;
     }
 
     private Vector3 HandleMovementInput()
@@ -111,8 +111,8 @@ public class Character : KinematicBody
 
     private void ApplyForcedDrag(Vector3 direction, float duartion, float speed)
     {
-        _forcedDraStarted = DateTime.Now;
-        _forcedDragEnabled = true;
+        _forcedDragStarted = DateTime.Now;
+        _forcedDragInProcess = true;
         _forcedDragDirection = direction.Normalized();
         _forcedDragDirection = _forcedDragDirection * speed;
         _forcedDragDuration = TimeSpan.FromSeconds(duartion);
@@ -128,12 +128,13 @@ public class Character : KinematicBody
 
 
 
-        if (_forcedDragEnabled
-        && DateTime.Now - _forcedDraStarted >= _forcedDragDuration)
+        if (_forcedDragInProcess
+        && DateTime.Now - _forcedDragStarted >= _forcedDragDuration)
         {
-            _forcedDragEnabled = false;
+            _forcedDragInProcess = false;
         }
-        if (!_forcedDragEnabled)
+        //check for forced drag. Forced drag basically means that player is being pushed somewhere and cannot use other control at that point
+        if (!_forcedDragInProcess)
         {
             float runSpeed = HandleSprintInput();
             Vector3 direction = HandleMovementInput();
@@ -241,7 +242,7 @@ public class Character : KinematicBody
 
             if (Input.IsActionJustPressed("TestInput"))
             {
-                ApplyForcedDrag(new Vector3(0, 0, 1).Rotated(new Vector3(0, 1, 0), _model.Rotation.y), 0.2f, 20);
+                ApplyForcedDrag(new Vector3(0, 0, 1).Rotated(new Vector3(0, 1, 0), _model.Rotation.y), 0.2f, 2);
             }
         }
         else
@@ -292,11 +293,17 @@ public class Character : KinematicBody
         _swordAnimator.Stop();
         _weaponDamageDealt = false;
         _lastAttackTime = DateTime.Now;
-        if (_movingTowardsTarget && GlobalTransform.origin.DistanceTo(_lockOnTrarget.GlobalTransform.origin) > 2)
+        if (_movingTowardsTarget && GlobalTransform.origin.DistanceTo(_lockOnTrarget.GlobalTransform.origin) > 1.5f)
         {
             _currentAttackDelay = TimeSpan.FromSeconds(_delaysByAttackDict["Lunge"]);
             _swordAnimator.Play("Lunge");
             ApplyForcedDrag(new Vector3(0, 0, 1).Rotated(new Vector3(0, 1, 0), _model.Rotation.y), 0.2f, 20);
+        }
+        if (_movingBackwardsFromTarget && IsOnFloor())
+        {
+            _currentAttackDelay = TimeSpan.FromSeconds(_delaysByAttackDict["Rising"]);
+            _swordAnimator.Play("Rising");
+            ApplyForcedDrag(new Vector3(0, 1, 0.1f).Rotated(new Vector3(0, 1, 0), _model.Rotation.y), 0.5f, 2.5f);
         }
         else
         {
@@ -340,7 +347,7 @@ public class Character : KinematicBody
                 //such a hack!
                 && _attackRayCast.GetCollider().GetType().ToString() == "EnemyNormal")
         {
-            (_attackRayCast.GetCollider() as EnemyNormal).ReceiveDamage(_damage);
+            (_attackRayCast.GetCollider() as EnemyNormal).ReceiveDamage(_damage, Vector3.Zero);
             _weaponDamageDealt = true;
         }
     }
