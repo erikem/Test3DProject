@@ -10,64 +10,67 @@ public class Character : KinematicBody
 
     // Called when the node enters the scene tree for the first time.
     public static Random Rand = new Random();
-    private float CurrentHP = 10f;
-    private float MaxHP = 10f;
-    private float Damage = 1f;
+    private float _currentHP = 10f;
+    private float _maxHP = 10f;
+    private float _damage = 1f;
     public float Gold = 0f;
-    private TimeSpan CurrentAttackDelay = TimeSpan.FromSeconds(0.5f);
-    SortedList<string, float> DelaysByAttackDict;
-    private DateTime LastAttackTime;
-    private float MoveSpeed = 1.5f;
-    private float RunSpeedModifier = 2f;
-    private float JumpForce = 5;
-    private float Gravity = 10;
-    private Vector3 Vel;
-    private Camera PlayerCamera;
-    private Spatial PlayerCameraController;
-    private RayCast AttackRayCast;
-    private float RegenAmount = 1f;
-    private float RegenFrequency = 10f;
-    private Timer RegenTimer;
-    private bool DoubleJumpExecuted = false;
-    private bool IsFalling = false;
-    private DateTime StartedFallingAt;
-    private TimeSpan FallToDeathTime = TimeSpan.FromSeconds(5);
-    private UI PlayerUI;
-    private AnimationPlayer SwordAnimator;
-    private bool WeaponDamageDealt = false;
-    private Spatial model;
-    private Spatial enemiesContainer;
-    private Godot.Collections.Array allEnemies;
-    private KinematicBody lockOnTrarget = null;
-    private float moveTowardsThreshold = 15f;
-    private float moveBackwardsThreshold = 165f;
-    private bool MovingTowardsTarget = false;
-    private bool MovingBackwardsFromTarget = false;
+    private TimeSpan _currentAttackDelay = TimeSpan.FromSeconds(0.5f);
+    private SortedList<string, float> _delaysByAttackDict;
+    private DateTime _lastAttackTime;
+    private float _moveSpeed = 1.5f;
+    private float _runSpeedModifier = 2f;
+    private float _jumpForce = 5;
+    private float _gravity = 10;
+    private Vector3 _vel;
+    private Camera _playerCamera;
+    private Spatial _playerCameraController;
+    private RayCast _attackRayCast;
+    private float _regenAmount = 1f;
+    private float _regenFrequency = 10f;
+    private Timer _regenTimer;
+    private bool _doubleJumpExecuted = false;
+    private bool _isFalling = false;
+    private DateTime _startedFallingAt;
+    private TimeSpan _fallToDeathTime = TimeSpan.FromSeconds(5);
+    private UI _playerUI;
+    private AnimationPlayer _swordAnimator;
+    private bool _weaponDamageDealt = false;
+    private Spatial _model;
+    private Spatial _enemiesContainer;
+    private Godot.Collections.Array _allEnemies;
+    private KinematicBody _lockOnTrarget = null;
+    private float _moveTowardsThreshold = 15f;
+    private float _moveBackwardsThreshold = 165f;
+    private bool _movingTowardsTarget = false;
+    private bool _movingBackwardsFromTarget = false;
+    private bool _forcedDragEnabled = false;
+    private TimeSpan _forcedDragDuration;
+    private Vector3 _forcedDragDirection;
 
 
     public override void _Ready()
     {
-        Vel = new Vector3();
-        PlayerCamera = GetNode("PlayerAttachedCameraController/PlayerCamera") as Camera;
-        PlayerCameraController = GetNode("PlayerAttachedCameraController") as Spatial;
-        AttackRayCast = GetNode("Model/Container/SwordController/Sword/AttackRayCast") as RayCast;
-        RegenTimer = GetNode("RegenTimer") as Timer;
-        model = GetNode("Model") as Spatial;
-        enemiesContainer = GetNode("/root/MainScene/Enemies") as Spatial;
+        _vel = new Vector3();
+        _playerCamera = GetNode("PlayerAttachedCameraController/PlayerCamera") as Camera;
+        _playerCameraController = GetNode("PlayerAttachedCameraController") as Spatial;
+        _attackRayCast = GetNode("Model/Container/SwordController/Sword/AttackRayCast") as RayCast;
+        _regenTimer = GetNode("RegenTimer") as Timer;
+        _model = GetNode("Model") as Spatial;
+        _enemiesContainer = GetNode("/root/MainScene/Enemies") as Spatial;
         //allEnemies = enemiesContainer.GetChildren();
-        RegenTimer.WaitTime = RegenFrequency;
-        RegenTimer.Start();
-        SwordAnimator = GetNode("Model/Container/SwordController/SwordAnimator") as AnimationPlayer;
-        PlayerUI = GetNode("/root/MainScene/UICanvas/UI") as UI;
-        PlayerUI.UpdateHealthBar(CurrentHP, MaxHP);
-        PlayerUI.UpdateGoldText(Gold);
-        LastAttackTime = DateTime.MinValue;
-        DelaysByAttackDict = new SortedList<string, float>();
-        DelaysByAttackDict["Attack1"] = 0.75f;
-        DelaysByAttackDict["Attack2"] = 0.75f;
-        DelaysByAttackDict["Attack3"] = 0.75f;
-        DelaysByAttackDict["Lunge"] = 1f;
-        DelaysByAttackDict["Rising"] = 1f;
+        _regenTimer.WaitTime = _regenFrequency;
+        _regenTimer.Start();
+        _swordAnimator = GetNode("Model/Container/SwordController/SwordAnimator") as AnimationPlayer;
+        _playerUI = GetNode("/root/MainScene/UICanvas/UI") as UI;
+        _playerUI.UpdateHealthBar(_currentHP, _maxHP);
+        _playerUI.UpdateGoldText(Gold);
+        _lastAttackTime = DateTime.MinValue;
+        _delaysByAttackDict = new SortedList<string, float>();
+        _delaysByAttackDict["Attack1"] = 0.75f;
+        _delaysByAttackDict["Attack2"] = 0.75f;
+        _delaysByAttackDict["Attack3"] = 0.75f;
+        _delaysByAttackDict["Lunge"] = 1f;
+        _delaysByAttackDict["Rising"] = 1f;
     }
 
     private Vector3 HandleMovementInput()
@@ -96,7 +99,7 @@ public class Character : KinematicBody
     {
         if (Input.IsActionPressed("Sprint"))
         {
-            return RunSpeedModifier;
+            return _runSpeedModifier;
         }
         else
         {
@@ -106,115 +109,116 @@ public class Character : KinematicBody
     public override void _PhysicsProcess(float delta)
     {
         //resetting key movement properties to make sure that movement stops if there's no player inout
-        MovingTowardsTarget = false;
-        MovingBackwardsFromTarget = false;
-        Vel.x = 0;
-        Vel.z = 0;
+        _movingTowardsTarget = false;
+        _movingBackwardsFromTarget = false;
+        _vel.x = 0;
+        _vel.z = 0;
         float runSpeed = HandleSprintInput();
         Vector3 direction = HandleMovementInput();
 
-        Vel.x = direction.x * MoveSpeed * runSpeed;
-        Vel.z = direction.z * MoveSpeed * runSpeed;
-        Vel.y -= Gravity * delta;
+        _vel.x = direction.x * _moveSpeed * runSpeed;
+        _vel.z = direction.z * _moveSpeed * runSpeed;
+        _vel.y -= _gravity * delta;
 
-        if (Input.IsActionJustPressed("Jump") && (IsOnFloor() || !DoubleJumpExecuted))
+        if (Input.IsActionJustPressed("Jump") && (IsOnFloor() || !_doubleJumpExecuted))
         {
             if (!IsOnFloor())
             {
-                DoubleJumpExecuted = true;
+                _doubleJumpExecuted = true;
             }
-            Vel.y = JumpForce;
-            //GD.Print("Now character has this many gold pieces: <" + Gold.ToString() + ">");
+            _vel.y = _jumpForce;
         }
         if ((direction.x != 0 || direction.z != 0))
         {
             //this line makes sure that player always move in expected direction regardless of PlayerAttachedCameraController y rotation.It basically rotates the Vel vector to match teh rotation of teh camera
-            Vel = Vel.Rotated(new Vector3(0, 1, 0), PlayerCameraController.Rotation.y);
+            _vel = _vel.Rotated(new Vector3(0, 1, 0), _playerCameraController.Rotation.y);
 
             //rotates to the direction of movement only if we don't target specific enemt (right mouse button by default)
             if (!Input.IsActionPressed("FocusTarget"))
             {
                 //these lines rotate the model of teh chaarcter and his sword to match the moevement direction. This is done by rotatin Model spatial that does not contain either KinematicBody or Camera
-                var rot = new Vector2(-Vel.x, -Vel.z).Angle() + Mathf.Deg2Rad(90) + model.Rotation.y;
-                model.Transform = model.Transform.Rotated(new Vector3(0, 1, 0), -rot);
+                var rot = new Vector2(-_vel.x, -_vel.z).Angle() + Mathf.Deg2Rad(90) + _model.Rotation.y;
+                _model.Transform = _model.Transform.Rotated(new Vector3(0, 1, 0), -rot);
             }
 
         }
         //following code is to target (face) closes enemy if such enemy exists and if player preses FocusTarget action (right mouse button by default)
-        if (enemiesContainer.GetChildren().Count > 0 && Input.IsActionPressed("FocusTarget"))
+        if (_enemiesContainer.GetChildren().Count > 0 && Input.IsActionPressed("FocusTarget"))
         {
             //we check if player is already locking onto some target
             //We don't want the lock to switch rapidly as enemies change places thus we ensure that while player holds the button he keep targeting the same enemy until either player releases button or enemy dies
-            if (!IsInstanceValid(lockOnTrarget) || lockOnTrarget == null)
+            if (!IsInstanceValid(_lockOnTrarget) || _lockOnTrarget == null)
             {
                 //we cycle all enemies that are a children of Mainscene/Enemies and find the closest one
-                allEnemies = enemiesContainer.GetChildren();
+                _allEnemies = _enemiesContainer.GetChildren();
                 float currentDistance = float.MaxValue;
                 int currentIndex = 0;
-                //GD.Print(allEnemies.Count);
-                for (int i = 0; i < allEnemies.Count; i++)
+                for (int i = 0; i < _allEnemies.Count; i++)
                 {
-                    if (!IsInstanceValid(allEnemies[i] as Spatial))
+                    if (!IsInstanceValid(_allEnemies[i] as Spatial))
                     {
                         continue;
                     }
-                    var enemy = ((Spatial)allEnemies[i]).GetNode("Container/EnemyNormal") as KinematicBody;
+                    var enemy = ((Spatial)_allEnemies[i]).GetNode("Container/EnemyNormal") as KinematicBody;
                     float dist = GlobalTransform.origin.DistanceTo(enemy.GlobalTransform.origin);
 
-                    //GD.Print(i + ": " + dist);
                     if (dist <= currentDistance)
                     {
                         currentDistance = dist;
                         currentIndex = i;
                     }
                 }
-                //GD.Print(currentIndex);
                 //we sent the found enemy as our LockOn target
-                lockOnTrarget = ((Spatial)allEnemies[currentIndex]).GetNode("Container/EnemyNormal") as KinematicBody;
+                _lockOnTrarget = ((Spatial)_allEnemies[currentIndex]).GetNode("Container/EnemyNormal") as KinematicBody;
             }
             //just in case something is wrong with our selected target we do the null and validity check again
             //probably would be better to let it throw exception and handle the root cause but not in this proto
-            if (IsInstanceValid(lockOnTrarget) && lockOnTrarget != null)
+            if (IsInstanceValid(_lockOnTrarget) && _lockOnTrarget != null)
             {
                 //we determine look direction
-                var LookDirection = lockOnTrarget.GlobalTransform.origin;
+                var LookDirection = _lockOnTrarget.GlobalTransform.origin;
                 //setting Y value of look direction to Translation.y to make sure that player doesn't make weird turns when jumping
                 LookDirection.y = Translation.y;
                 //Trying to look at enemy but failing because we are looking 180 degress other way
-                model.LookAt(LookDirection, Vector3.Up);
+                _model.LookAt(LookDirection, Vector3.Up);
                 //compensating 180 degree turn
-                model.RotateObjectLocal(Vector3.Up, Mathf.Pi);
-                float movementToTargetAngle = Mathf.Rad2Deg(Vel.AngleTo(lockOnTrarget.GlobalTransform.origin - GlobalTransform.origin));
-                //GD.Print(Mathf.Rad2Deg(movementToTargetAngle));
-                if (movementToTargetAngle < moveTowardsThreshold)
+                _model.RotateObjectLocal(Vector3.Up, Mathf.Pi);
+                float movementToTargetAngle = Mathf.Rad2Deg(_vel.AngleTo(_lockOnTrarget.GlobalTransform.origin - GlobalTransform.origin));
+                if (movementToTargetAngle < _moveTowardsThreshold)
                 {
-                    MovingTowardsTarget = true;
+                    _movingTowardsTarget = true;
                 }
-                else if (movementToTargetAngle > moveBackwardsThreshold)
+                else if (movementToTargetAngle > _moveBackwardsThreshold)
                 {
-                    MovingBackwardsFromTarget = true;
+                    _movingBackwardsFromTarget = true;
                 }
             }
             else
             {
                 //setting it to null if instance is not valid
-                lockOnTrarget = null;
+                _lockOnTrarget = null;
             }
 
         }
         else
         {
             //we set LockOn target to null once player releases button of if there are no more enemies left on scene
-            lockOnTrarget = null;
+            _lockOnTrarget = null;
         }
 
-        Vel = MoveAndSlide(Vel, Vector3.Up);
+        if (Input.IsActionJustPressed("TestInput"))
+        {
+            _vel = new Vector3(0, 0, 50);
+            _vel = _vel.Rotated(new Vector3(0, 1, 0), _model.Rotation.y);
+        }
+
+        _vel = MoveAndSlide(_vel, Vector3.Up);
 
     }
 
     private void _on_RegenTimer_timeout()
     {
-        ChangeHealth(RegenAmount);
+        ChangeHealth(_regenAmount);
     }
 
     public void ReceiveDamage(float damage)
@@ -225,9 +229,9 @@ public class Character : KinematicBody
 
     private void ChangeHealth(float value)
     {
-        CurrentHP = Mathf.Clamp(CurrentHP + value, 0, MaxHP);
-        PlayerUI.UpdateHealthBar(CurrentHP, MaxHP);
-        if (CurrentHP <= 0)
+        _currentHP = Mathf.Clamp(_currentHP + value, 0, _maxHP);
+        _playerUI.UpdateHealthBar(_currentHP, _maxHP);
+        if (_currentHP <= 0)
         {
             Die();
         }
@@ -241,17 +245,17 @@ public class Character : KinematicBody
     public bool TryAttack()
     {
 
-        if (DateTime.Now - LastAttackTime < CurrentAttackDelay)
+        if (DateTime.Now - _lastAttackTime < _currentAttackDelay)
         {
             return false;
         }
-        SwordAnimator.Stop();
-        WeaponDamageDealt = false;
-        LastAttackTime = DateTime.Now;
-        if (MovingTowardsTarget)
+        _swordAnimator.Stop();
+        _weaponDamageDealt = false;
+        _lastAttackTime = DateTime.Now;
+        if (_movingTowardsTarget)
         {
-            CurrentAttackDelay = TimeSpan.FromSeconds(DelaysByAttackDict["Lunge"]);
-            SwordAnimator.Play("Lunge");
+            _currentAttackDelay = TimeSpan.FromSeconds(_delaysByAttackDict["Lunge"]);
+            _swordAnimator.Play("Lunge");
         }
         else
         {
@@ -260,8 +264,8 @@ public class Character : KinematicBody
             Animations.Add("Attack2");
             Animations.Add("Attack3");
             var currentAttackAnimation = Animations[Rand.Next(Animations.Count)];
-            CurrentAttackDelay = TimeSpan.FromSeconds(DelaysByAttackDict[currentAttackAnimation]);
-            SwordAnimator.Play(currentAttackAnimation);
+            _currentAttackDelay = TimeSpan.FromSeconds(_delaysByAttackDict[currentAttackAnimation]);
+            _swordAnimator.Play(currentAttackAnimation);
         }
 
 
@@ -270,16 +274,16 @@ public class Character : KinematicBody
     // Called every frame. 'delta' is the elapsed time since the previous frame.
     public override void _Process(float delta)
     {
-        if (!IsOnFloor() && Vel.y < 0)
+        if (!IsOnFloor() && _vel.y < 0)
         {
-            if (!IsFalling)
+            if (!_isFalling)
             {
-                IsFalling = true;
-                StartedFallingAt = DateTime.Now;
+                _isFalling = true;
+                _startedFallingAt = DateTime.Now;
             }
             else
             {
-                if (DateTime.Now - StartedFallingAt > FallToDeathTime)
+                if (DateTime.Now - _startedFallingAt > _fallToDeathTime)
                 {
                     Die();
                 }
@@ -289,30 +293,30 @@ public class Character : KinematicBody
         {
             if (IsOnFloor())
             {
-                DoubleJumpExecuted = false;
+                _doubleJumpExecuted = false;
             }
-            IsFalling = false;
+            _isFalling = false;
 
         }
         if (Input.IsActionPressed("Attack"))
         {
             TryAttack();
         }
-        if (SwordAnimator.IsPlaying()
-        && !WeaponDamageDealt
-        && AttackRayCast.IsColliding()
+        if (_swordAnimator.IsPlaying()
+        && !_weaponDamageDealt
+        && _attackRayCast.IsColliding()
         //such a hack!
-        && AttackRayCast.GetCollider().GetType().ToString() == "EnemyNormal")
+        && _attackRayCast.GetCollider().GetType().ToString() == "EnemyNormal")
         {
-            (AttackRayCast.GetCollider() as EnemyNormal).ReceiveDamage(Damage);
-            WeaponDamageDealt = true;
+            (_attackRayCast.GetCollider() as EnemyNormal).ReceiveDamage(_damage);
+            _weaponDamageDealt = true;
         }
 
     }
     public void AddGold(float amount)
     {
         Gold += amount;
-        PlayerUI.UpdateGoldText(Gold);
+        _playerUI.UpdateGoldText(Gold);
         //Console.WriteLine("Now character has this many gold: <" + Gold.ToString() + ">");
     }
 }
