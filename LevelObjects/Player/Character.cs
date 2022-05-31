@@ -247,13 +247,7 @@ public class Character : KinematicBody
                 LockOnTrarget = null;
             }
 
-            if (Input.IsActionJustPressed("Dash")
-            && DateTime.Now - _lastDashAt >= _dashCooldown)
-            {
-                _lastDashAt = DateTime.Now;
-                //ApplyForcedDrag(new ForcedDrag(new Vector3(0, 0, 1).Rotated(new Vector3(0, 1, 0), _model.Rotation.y), 20, 0.15f));
-                ApplyForcedDrag(new ForcedDrag(_vel, 15, 0.1f));
-            }
+            TryDash();
         }
         else
         {
@@ -265,6 +259,25 @@ public class Character : KinematicBody
 
         _vel = MoveAndSlide(_vel, Vector3.Up);
 
+    }
+
+    private void TryDash()
+    {
+        if (Input.IsActionJustPressed("Dash")
+                    && DateTime.Now - _lastDashAt >= _dashCooldown)
+        {
+            _lastDashAt = DateTime.Now;
+            //ApplyForcedDrag(new ForcedDrag(new Vector3(0, 0, 1).Rotated(new Vector3(0, 1, 0), _model.Rotation.y), 20, 0.15f));
+            if (Mathf.Abs(_vel.x) < 0.01 && Mathf.Abs(_vel.z) < 0.01)
+            {
+                ApplyForcedDrag(new ForcedDrag(new Vector3(0, 0, 1).Rotated(new Vector3(0, 1, 0), _model.Rotation.y), 15, 0.1f));
+            }
+            else
+            {
+                ApplyForcedDrag(new ForcedDrag(_vel, 15, 0.1f));
+            }
+
+        }
     }
 
     private void _on_RegenTimer_timeout()
