@@ -38,8 +38,8 @@ public class Character : KinematicBody
     private Spatial _enemiesContainer;
     private Godot.Collections.Array _allEnemies;
     private KinematicBody _lockOnTrarget = null;
-    private float _moveTowardsThreshold = 15f;
-    private float _moveBackwardsThreshold = 165f;
+    private float _moveTowardsThreshold = 25f;
+    private float _moveBackwardsThreshold = 155f;
     private bool _movingTowardsTarget = false;
     private bool _movingBackwardsFromTarget = false;
     private bool _forcedDragInProcess = false;
@@ -49,6 +49,8 @@ public class Character : KinematicBody
     private bool _targetCentricControlsOrientation = false;
     private int _attackUniqueID = 0;
     public int AttackID { get => _attackUniqueID; }
+    private DateTime _lastDashAt;
+    private TimeSpan _dashCooldown = TimeSpan.FromSeconds(0.75f);
 
 
     public KinematicBody LockOnTrarget { get => _lockOnTrarget; set => _lockOnTrarget = value; }
@@ -147,14 +149,14 @@ public class Character : KinematicBody
             _vel.z = direction.z * _moveSpeed * runSpeed;
             _vel.y -= _gravity * delta;
 
-            if (Input.IsActionJustPressed("Jump") && (IsOnFloor() || !_doubleJumpExecuted))
+            /*if (Input.IsActionJustPressed("Jump") && (IsOnFloor() || !_doubleJumpExecuted))
             {
                 if (!IsOnFloor())
                 {
                     _doubleJumpExecuted = true;
                 }
                 _vel.y = _jumpForce;
-            }
+            }*/
             if ((direction.x != 0 || direction.z != 0))
             {
                 //this line makes sure that player always move in expected direction regardless of PlayerAttachedCameraController y rotation.It basically rotates the Vel vector to match teh rotation of teh camera
@@ -245,9 +247,12 @@ public class Character : KinematicBody
                 LockOnTrarget = null;
             }
 
-            if (Input.IsActionJustPressed("TestInput"))
+            if (Input.IsActionJustPressed("Dash")
+            && DateTime.Now - _lastDashAt >= _dashCooldown)
             {
-                ApplyForcedDrag(new ForcedDrag(new Vector3(0, 0, 1).Rotated(new Vector3(0, 1, 0), _model.Rotation.y), 2, 0.2f));
+                _lastDashAt = DateTime.Now;
+                //ApplyForcedDrag(new ForcedDrag(new Vector3(0, 0, 1).Rotated(new Vector3(0, 1, 0), _model.Rotation.y), 20, 0.15f));
+                ApplyForcedDrag(new ForcedDrag(_vel, 15, 0.1f));
             }
         }
         else
@@ -328,6 +333,7 @@ public class Character : KinematicBody
     // Called every frame. 'delta' is the elapsed time since the previous frame.
     public override void _Process(float delta)
     {
+        //switching between control orientations
         ProcessFallDeathTime();
         if (Input.IsActionPressed("GlobalControlsOrientation"))
         {
@@ -337,6 +343,7 @@ public class Character : KinematicBody
         {
             _targetCentricControlsOrientation = true;
         }
+        //processing attack input here
         if (Input.IsActionPressed("Attack"))
         {
             TryAttack();
