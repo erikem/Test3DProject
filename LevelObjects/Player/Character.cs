@@ -47,6 +47,7 @@ public class Character : KinematicBody
     private TimeSpan _forcedDragDuration;
     private DateTime _forcedDraStarted;
     private Vector3 _forcedDragDirection;
+    private bool _targetCentricControlsOrientation = false;
 
 
     public override void _Ready()
@@ -203,6 +204,18 @@ public class Character : KinematicBody
                     _model.LookAt(LookDirection, Vector3.Up);
                     //compensating 180 degree turn
                     _model.RotateObjectLocal(Vector3.Up, Mathf.Pi);
+
+                    //switches movement controls to target-centric. On this mode pressing forward will move you straight towards target instead of forward along Z axis
+                    if (_targetCentricControlsOrientation)
+                    {
+                        _vel = _vel.Rotated(new Vector3(0, 1, 0), -_playerCameraController.Rotation.y);
+                        _vel = _vel.Rotated(new Vector3(0, 1, 0), _model.Rotation.y);
+                    }
+
+                    //_vel = _vel.Rotated(new Vector3(0, 1, 0), Mathf.Deg2Rad(-90));
+                    //_vel = new Vector3(_vel.z, _vel.y, _vel.x);
+
+                    //determining if player is moving towards target, away from it or in some other direction
                     float movementToTargetAngle = Mathf.Rad2Deg(_vel.AngleTo(_lockOnTrarget.GlobalTransform.origin - GlobalTransform.origin));
                     if (movementToTargetAngle < _moveTowardsThreshold)
                     {
@@ -302,6 +315,38 @@ public class Character : KinematicBody
     // Called every frame. 'delta' is the elapsed time since the previous frame.
     public override void _Process(float delta)
     {
+        ProcessFallDeathTime();
+        if (Input.IsActionPressed("GlobalControlsOrientation"))
+        {
+            _targetCentricControlsOrientation = false;
+        }
+        if (Input.IsActionPressed("TargetCentricControlsOrientation"))
+        {
+            _targetCentricControlsOrientation = true;
+        }
+        if (Input.IsActionPressed("Attack"))
+        {
+            TryAttack();
+        }
+        ProcessAttackInProgress();
+
+    }
+
+    private void ProcessAttackInProgress()
+    {
+        if (_swordAnimator.IsPlaying()
+                && !_weaponDamageDealt
+                && _attackRayCast.IsColliding()
+                //such a hack!
+                && _attackRayCast.GetCollider().GetType().ToString() == "EnemyNormal")
+        {
+            (_attackRayCast.GetCollider() as EnemyNormal).ReceiveDamage(_damage);
+            _weaponDamageDealt = true;
+        }
+    }
+
+    private void ProcessFallDeathTime()
+    {
         if (!IsOnFloor() && _vel.y < 0)
         {
             if (!_isFalling)
@@ -326,21 +371,8 @@ public class Character : KinematicBody
             _isFalling = false;
 
         }
-        if (Input.IsActionPressed("Attack"))
-        {
-            TryAttack();
-        }
-        if (_swordAnimator.IsPlaying()
-        && !_weaponDamageDealt
-        && _attackRayCast.IsColliding()
-        //such a hack!
-        && _attackRayCast.GetCollider().GetType().ToString() == "EnemyNormal")
-        {
-            (_attackRayCast.GetCollider() as EnemyNormal).ReceiveDamage(_damage);
-            _weaponDamageDealt = true;
-        }
-
     }
+
     public void AddGold(float amount)
     {
         Gold += amount;
