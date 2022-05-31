@@ -14,7 +14,7 @@ public class EnemyNormal : KinematicBody
     private float _attackDistance = 1.5f;
     private TimeSpan _attackRate = TimeSpan.FromSeconds(1.5f);
     private DateTime _lastAttackTime;
-    private float _moveSpeed = 0.1f;
+    private float _moveSpeed = 1f;
     private float _gravity = 10;
     private Vector3 _vel;
     private RayCast _attackRayCast;
@@ -23,13 +23,19 @@ public class EnemyNormal : KinematicBody
     private TimeSpan _fallToDeathTime = TimeSpan.FromSeconds(5);
     private AnimationPlayer _swordAnimator;
     private bool _weaponDamageDealt = false;
-    private KinematicBody _player;
+    private Character _player;
     private Spatial _playerModel;
     private Spatial _myRoot;
     private bool _forcedDragInProcess = false;
     private TimeSpan _forcedDragDuration;
     private DateTime _forcedDragStarted;
     private Vector3 _forcedDragDirection;
+    private TimeSpan _evadeCoolDown = TimeSpan.FromSeconds(10f);
+    private float _extarEvadeChance = 0.15f;
+    private DateTime _lastEvadeTime;
+    private int _lastEvadedAttackID = 0;
+
+
     private void ApplyForcedDrag(ForcedDrag drag)
     {
         _forcedDragStarted = DateTime.Now;
@@ -44,18 +50,21 @@ public class EnemyNormal : KinematicBody
         _attackRayCast = GetNode("Model/Container/SwordController/Sword/AttackRayCast") as RayCast;
         _swordAnimator = GetNode("Model/Container/SwordController/SwordAnimator") as AnimationPlayer;
         _lastAttackTime = DateTime.MinValue;
-        _player = GetNode("/root/MainScene/Character001_Normalized/PlayerCharacter") as KinematicBody;
+        _player = GetNode("/root/MainScene/Character001_Normalized/PlayerCharacter") as Character;
         _playerModel = GetNode("/root/MainScene/Character001_Normalized/PlayerCharacter/Model") as Spatial;
         _myRoot = GetParent().GetParent() as Spatial;
 
     }
     public override void _PhysicsProcess(float delta)
     {
+        TryEvade();
         if (_forcedDragInProcess
         && DateTime.Now - _forcedDragStarted >= _forcedDragDuration)
         {
             _forcedDragInProcess = false;
         }
+
+
         if (!_forcedDragInProcess)
         {
             var dist = GlobalTransform.origin.DistanceTo(_playerModel.GlobalTransform.origin);
@@ -67,7 +76,6 @@ public class EnemyNormal : KinematicBody
             //general direction of player
             var LookDirection = _playerModel.GlobalTransform.origin;
             //setting Y value of look direction sop that enemies don't look UP/DOWN in case player is above/belwo them
-            GD.Print(Translation.y);
             LookDirection.y = Translation.y;
             //Trying to look at player but failing because we are looking 180 degress other way
             LookAt(LookDirection, Vector3.Up);
@@ -87,6 +95,60 @@ public class EnemyNormal : KinematicBody
         //standard move and slide
         _vel = MoveAndSlide(_vel, Vector3.Up);
 
+    }
+    //this method handles all enemy evasion mechanics
+    //if enemy is atrgeted by player then enemy watches for normal attacks as well as lunges and risings
+    //lunges are evaded by jumping to sied
+    //other attacks are evaded by jumping backwards
+    private void TryEvade()
+    {
+        if (!_forcedDragInProcess
+                && _player.SwordAnimator.IsPlaying()
+                && _player.AttackID != _lastEvadedAttackID
+                )
+        {
+            _lastEvadedAttackID = _player.AttackID;
+            if (DateTime.Now - _lastEvadeTime >= _evadeCoolDown
+                || GD.Randf() <= _extarEvadeChance)
+            {
+                var dist = GlobalTransform.origin.DistanceTo(_playerModel.GlobalTransform.origin);
+                if (_player.LockOnTrarget == this)
+                {
+                    if (_player.SwordAnimator.CurrentAnimation == "Lunge"
+                    && dist < 5)
+                    {
+                        _lastEvadeTime = DateTime.Now;
+                        if (GD.Randf() <= 0.5f)
+                        {
+                            ApplyForcedDrag(new ForcedDrag(new Vector3(1, 0, 0).Rotated(new Vector3(0, 1, 0), Rotation.y), 12, 0.08f));
+                        }
+                        else
+                        {
+                            ApplyForcedDrag(new ForcedDrag(new Vector3(-1, 0, 0).Rotated(new Vector3(0, 1, 0), Rotation.y), 12, 0.08f));
+                        }
+                    }
+                    else if (_player.SwordAnimator.CurrentAnimation == "Rising"
+                    && dist < 2.5)
+                    {
+                        _lastEvadeTime = DateTime.Now;
+                        ApplyForcedDrag(new ForcedDrag(new Vector3(0, 0, -1).Rotated(new Vector3(0, 1, 0), Rotation.y), 12, 0.08f));
+                    }
+                    else if (dist < 1.5)
+                    {
+                        _lastEvadeTime = DateTime.Now;
+                        ApplyForcedDrag(new ForcedDrag(new Vector3(0, 0, -1).Rotated(new Vector3(0, 1, 0), Rotation.y), 12, 0.08f));
+                    }
+
+                }
+                else if (dist < 1.5
+                && _player.SwordAnimator.CurrentAnimation != "Lunge"
+                && _player.SwordAnimator.CurrentAnimation != "Rising")
+                {
+                    _lastEvadeTime = DateTime.Now;
+                    ApplyForcedDrag(new ForcedDrag(new Vector3(0, 0, -1).Rotated(new Vector3(0, 1, 0), Rotation.y), 12, 0.08f));
+                }
+            }
+        }
     }
 
     public void ReceiveDamage(float damage, ForcedDrag drag = null)

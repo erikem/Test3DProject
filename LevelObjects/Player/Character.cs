@@ -47,7 +47,12 @@ public class Character : KinematicBody
     private DateTime _forcedDragStarted;
     private Vector3 _forcedDragDirection;
     private bool _targetCentricControlsOrientation = false;
+    private int _attackUniqueID = 0;
+    public int AttackID { get => _attackUniqueID; }
 
+
+    public KinematicBody LockOnTrarget { get => _lockOnTrarget; set => _lockOnTrarget = value; }
+    public AnimationPlayer SwordAnimator { get => _swordAnimator; set => _swordAnimator = value; }
 
     public override void _Ready()
     {
@@ -61,17 +66,18 @@ public class Character : KinematicBody
         //allEnemies = enemiesContainer.GetChildren();
         _regenTimer.WaitTime = _regenFrequency;
         _regenTimer.Start();
-        _swordAnimator = GetNode("Model/Container/SwordController/SwordAnimator") as AnimationPlayer;
+        SwordAnimator = GetNode("Model/Container/SwordController/SwordAnimator") as AnimationPlayer;
         _playerUI = GetNode("/root/MainScene/UICanvas/UI") as UI;
         _playerUI.UpdateHealthBar(_currentHP, _maxHP);
         _playerUI.UpdateGoldText(Gold);
         _lastAttackTime = DateTime.MinValue;
+        //defining attack delays after different attack animations
         _delaysByAttackDict = new SortedList<string, float>();
         _delaysByAttackDict["Attack1"] = 0.75f;
         _delaysByAttackDict["Attack2"] = 0.75f;
         _delaysByAttackDict["Attack3"] = 0.75f;
         _delaysByAttackDict["Lunge"] = 0.75f;
-        _delaysByAttackDict["Rising"] = 0.75f;
+        _delaysByAttackDict["Rising"] = 0.5f;
     }
 
     private Vector3 HandleMovementInput()
@@ -168,7 +174,7 @@ public class Character : KinematicBody
             {
                 //we check if player is already locking onto some target
                 //We don't want the lock to switch rapidly as enemies change places thus we ensure that while player holds the button he keep targeting the same enemy until either player releases button or enemy dies
-                if (!IsInstanceValid(_lockOnTrarget) || _lockOnTrarget == null)
+                if (!IsInstanceValid(LockOnTrarget) || LockOnTrarget == null)
                 {
                     //we cycle all enemies that are a children of Mainscene/Enemies and find the closest one
                     _allEnemies = _enemiesContainer.GetChildren();
@@ -190,14 +196,14 @@ public class Character : KinematicBody
                         }
                     }
                     //we sent the found enemy as our LockOn target
-                    _lockOnTrarget = ((Spatial)_allEnemies[currentIndex]).GetNode("Container/EnemyNormal") as KinematicBody;
+                    LockOnTrarget = ((Spatial)_allEnemies[currentIndex]).GetNode("Container/EnemyNormal") as KinematicBody;
                 }
                 //just in case something is wrong with our selected target we do the null and validity check again
                 //probably would be better to let it throw exception and handle the root cause but not in this proto
-                if (IsInstanceValid(_lockOnTrarget) && _lockOnTrarget != null)
+                if (IsInstanceValid(LockOnTrarget) && LockOnTrarget != null)
                 {
                     //we determine look direction
-                    var LookDirection = _lockOnTrarget.GlobalTransform.origin;
+                    var LookDirection = LockOnTrarget.GlobalTransform.origin;
                     //setting Y value of look direction to Translation.y to make sure that player doesn't make weird turns when jumping
                     LookDirection.y = Translation.y;
                     //Trying to look at enemy but failing because we are looking 180 degress other way
@@ -216,7 +222,7 @@ public class Character : KinematicBody
                     //_vel = new Vector3(_vel.z, _vel.y, _vel.x);
 
                     //determining if player is moving towards target, away from it or in some other direction
-                    float movementToTargetAngle = Mathf.Rad2Deg(_vel.AngleTo(_lockOnTrarget.GlobalTransform.origin - GlobalTransform.origin));
+                    float movementToTargetAngle = Mathf.Rad2Deg(_vel.AngleTo(LockOnTrarget.GlobalTransform.origin - GlobalTransform.origin));
                     if (movementToTargetAngle < _moveTowardsThreshold)
                     {
                         _movingTowardsTarget = true;
@@ -229,14 +235,14 @@ public class Character : KinematicBody
                 else
                 {
                     //setting it to null if instance is not valid
-                    _lockOnTrarget = null;
+                    LockOnTrarget = null;
                 }
 
             }
             else
             {
                 //we set LockOn target to null once player releases button of if there are no more enemies left on scene
-                _lockOnTrarget = null;
+                LockOnTrarget = null;
             }
 
             if (Input.IsActionJustPressed("TestInput"))
@@ -289,20 +295,20 @@ public class Character : KinematicBody
         {
             return false;
         }
-        _swordAnimator.Stop();
+        SwordAnimator.Stop();
         _weaponDamageDealt = false;
         _lastAttackTime = DateTime.Now;
-        if (_movingTowardsTarget && GlobalTransform.origin.DistanceTo(_lockOnTrarget.GlobalTransform.origin) > 1.5f)
+        if (_movingTowardsTarget && GlobalTransform.origin.DistanceTo(LockOnTrarget.GlobalTransform.origin) > 1.5f)
         {
             _currentAttackDelay = TimeSpan.FromSeconds(_delaysByAttackDict["Lunge"]);
-            _swordAnimator.Play("Lunge");
-            ApplyForcedDrag(new ForcedDrag(new Vector3(0, 0, 1).Rotated(new Vector3(0, 1, 0), _model.Rotation.y), 20, 0.2f));
+            SwordAnimator.Play("Lunge");
+            ApplyForcedDrag(new ForcedDrag(new Vector3(0, 0, 1).Rotated(new Vector3(0, 1, 0), _model.Rotation.y), 20, 0.15f));
         }
-        if (_movingBackwardsFromTarget && IsOnFloor())
+        else if (_movingBackwardsFromTarget && IsOnFloor())
         {
             _currentAttackDelay = TimeSpan.FromSeconds(_delaysByAttackDict["Rising"]);
-            _swordAnimator.Play("Rising");
-            ApplyForcedDrag(new ForcedDrag(new Vector3(0, 1, 0.1f).Rotated(new Vector3(0, 1, 0), _model.Rotation.y), 2.5f, 0.5f));
+            SwordAnimator.Play("Rising");
+            ApplyForcedDrag(new ForcedDrag(new Vector3(0, 1, 0.2f).Rotated(new Vector3(0, 1, 0), _model.Rotation.y), 2.5f, 0.5f));
         }
         else
         {
@@ -312,8 +318,9 @@ public class Character : KinematicBody
             Animations.Add("Attack3");
             var currentAttackAnimation = Animations[Rand.Next(Animations.Count)];
             _currentAttackDelay = TimeSpan.FromSeconds(_delaysByAttackDict[currentAttackAnimation]);
-            _swordAnimator.Play(currentAttackAnimation);
+            SwordAnimator.Play(currentAttackAnimation);
         }
+        _attackUniqueID = (int)GD.Randi();
 
 
         return true;
@@ -340,18 +347,18 @@ public class Character : KinematicBody
 
     private void ProcessAttackInProgress()
     {
-        if (_swordAnimator.IsPlaying()
+        if (SwordAnimator.IsPlaying()
                 && !_weaponDamageDealt
                 && _attackRayCast.IsColliding()
                 //such a hack!
                 && _attackRayCast.GetCollider().GetType().ToString() == "EnemyNormal")
         {
             ForcedDrag dragToTarget = null;
-            if (_swordAnimator.CurrentAnimation == "Lunge")
+            if (SwordAnimator.CurrentAnimation == "Lunge")
             {
 
             }
-            else if (_swordAnimator.CurrentAnimation == "Rising")
+            else if (SwordAnimator.CurrentAnimation == "Rising")
             {
                 dragToTarget = new ForcedDrag(new Vector3(0, 1, 0.1f).Rotated(new Vector3(0, 1, 0), _model.Rotation.y), 2.5f, 0.5f);
             }
