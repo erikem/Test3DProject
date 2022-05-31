@@ -41,8 +41,8 @@ public class EnemyNormal : KinematicBody
     public override void _Ready()
     {
         _vel = new Vector3();
-        _attackRayCast = GetNode("SwordController/Sword/AttackRayCast") as RayCast;
-        _swordAnimator = GetNode("SwordController/SwordAnimator") as AnimationPlayer;
+        _attackRayCast = GetNode("Model/Container/SwordController/Sword/AttackRayCast") as RayCast;
+        _swordAnimator = GetNode("Model/Container/SwordController/SwordAnimator") as AnimationPlayer;
         _lastAttackTime = DateTime.MinValue;
         _player = GetNode("/root/MainScene/Character001_Normalized/PlayerCharacter") as KinematicBody;
         _playerModel = GetNode("/root/MainScene/Character001_Normalized/PlayerCharacter/Model") as Spatial;
@@ -68,7 +68,7 @@ public class EnemyNormal : KinematicBody
             var LookDirection = _playerModel.GlobalTransform.origin;
             //setting Y value of look direction sop that enemies don't look UP/DOWN in case player is above/belwo them
             GD.Print(Translation.y);
-            LookDirection.y = 0;
+            LookDirection.y = Translation.y;
             //Trying to look at player but failing because we are looking 180 degress other way
             LookAt(LookDirection, Vector3.Up);
             //compensating 1800 degrees to actually look at player
