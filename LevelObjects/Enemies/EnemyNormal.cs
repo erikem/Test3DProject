@@ -30,6 +30,7 @@ public class EnemyNormal : KinematicBody
     private TimeSpan _forcedDragDuration;
     private DateTime _forcedDragStarted;
     private Vector3 _forcedDragDirection;
+    private string _forcedDragName = "";
     private TimeSpan _evadeCoolDown = TimeSpan.FromSeconds(10f);
     private float _extarEvadeChance = 0.15f;
     private DateTime _lastEvadeTime;
@@ -43,6 +44,7 @@ public class EnemyNormal : KinematicBody
         _forcedDragDirection = drag.DragVector.Normalized();
         _forcedDragDirection = _forcedDragDirection * drag.SpeedModifier;
         _forcedDragDuration = drag.Duration;
+        _forcedDragName = drag.Name;
     }
     public override void _Ready()
     {
@@ -120,23 +122,23 @@ public class EnemyNormal : KinematicBody
                         _lastEvadeTime = DateTime.Now;
                         if (GD.Randf() <= 0.5f)
                         {
-                            ApplyForcedDrag(new ForcedDrag(new Vector3(1, 0, 0).Rotated(new Vector3(0, 1, 0), Rotation.y), 12, 0.08f));
+                            ApplyForcedDrag(new ForcedDrag(new Vector3(1, 0, 0).Rotated(new Vector3(0, 1, 0), Rotation.y), 12, 0.08f, "evade"));
                         }
                         else
                         {
-                            ApplyForcedDrag(new ForcedDrag(new Vector3(-1, 0, 0).Rotated(new Vector3(0, 1, 0), Rotation.y), 12, 0.08f));
+                            ApplyForcedDrag(new ForcedDrag(new Vector3(-1, 0, 0).Rotated(new Vector3(0, 1, 0), Rotation.y), 12, 0.08f, "evade"));
                         }
                     }
                     else if (_player.SwordAnimator.CurrentAnimation == "Rising"
                     && dist < 2.5)
                     {
                         _lastEvadeTime = DateTime.Now;
-                        ApplyForcedDrag(new ForcedDrag(new Vector3(0, 0, -1).Rotated(new Vector3(0, 1, 0), Rotation.y), 12, 0.08f));
+                        ApplyForcedDrag(new ForcedDrag(new Vector3(0, 0, -1).Rotated(new Vector3(0, 1, 0), Rotation.y), 12, 0.08f, "evade"));
                     }
                     else if (dist < 1.5)
                     {
                         _lastEvadeTime = DateTime.Now;
-                        ApplyForcedDrag(new ForcedDrag(new Vector3(0, 0, -1).Rotated(new Vector3(0, 1, 0), Rotation.y), 12, 0.08f));
+                        ApplyForcedDrag(new ForcedDrag(new Vector3(0, 0, -1).Rotated(new Vector3(0, 1, 0), Rotation.y), 12, 0.08f, "evade"));
                     }
 
                 }
@@ -145,7 +147,7 @@ public class EnemyNormal : KinematicBody
                 && _player.SwordAnimator.CurrentAnimation != "Rising")
                 {
                     _lastEvadeTime = DateTime.Now;
-                    ApplyForcedDrag(new ForcedDrag(new Vector3(0, 0, -1).Rotated(new Vector3(0, 1, 0), Rotation.y), 12, 0.08f));
+                    ApplyForcedDrag(new ForcedDrag(new Vector3(0, 0, -1).Rotated(new Vector3(0, 1, 0), Rotation.y), 12, 0.08f, "evade"));
                 }
             }
         }

@@ -10,7 +10,7 @@ public class MainScene : Spatial
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {
-        OS.WindowPosition = (OS.GetScreenSize() - OS.WindowSize) / 2;
+        //OS.WindowPosition = (OS.GetScreenSize() - OS.WindowSize) / 2;
     }
 
     //  // Called every frame. 'delta' is the elapsed time since the previous frame.

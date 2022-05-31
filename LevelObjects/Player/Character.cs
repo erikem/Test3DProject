@@ -46,11 +46,13 @@ public class Character : KinematicBody
     private TimeSpan _forcedDragDuration;
     private DateTime _forcedDragStarted;
     private Vector3 _forcedDragDirection;
+    private string _forcedDragName = "";
     private bool _targetCentricControlsOrientation = false;
     private int _attackUniqueID = 0;
     public int AttackID { get => _attackUniqueID; }
     private DateTime _lastDashAt;
     private TimeSpan _dashCooldown = TimeSpan.FromSeconds(0.75f);
+    //private _playerCollisionShape
 
 
     public KinematicBody LockOnTrarget { get => _lockOnTrarget; set => _lockOnTrarget = value; }
@@ -123,6 +125,7 @@ public class Character : KinematicBody
         _forcedDragDirection = drag.DragVector.Normalized();
         _forcedDragDirection = _forcedDragDirection * drag.SpeedModifier;
         _forcedDragDuration = drag.Duration;
+        _forcedDragName = drag.Name;
     }
 
     public override void _PhysicsProcess(float delta)
@@ -259,6 +262,21 @@ public class Character : KinematicBody
 
         _vel = MoveAndSlide(_vel, Vector3.Up);
 
+
+        if (GetSlideCount() > 0
+        && _forcedDragInProcess
+        && (_forcedDragName == "evade"
+        || _forcedDragName == "LungeAttacker"))
+        {
+            for (int i = 0; i < GetSlideCount(); i++)
+            {
+                if (GetSlideCollision(i).Collider.GetType() == typeof(EnemyNormal))
+                {
+                    _forcedDragInProcess = false;
+                }
+            }
+        }
+
     }
 
     private void TryDash()
@@ -267,14 +285,13 @@ public class Character : KinematicBody
                     && DateTime.Now - _lastDashAt >= _dashCooldown)
         {
             _lastDashAt = DateTime.Now;
-            //ApplyForcedDrag(new ForcedDrag(new Vector3(0, 0, 1).Rotated(new Vector3(0, 1, 0), _model.Rotation.y), 20, 0.15f));
             if (Mathf.Abs(_vel.x) < 0.01 && Mathf.Abs(_vel.z) < 0.01)
             {
-                ApplyForcedDrag(new ForcedDrag(new Vector3(0, 0, 1).Rotated(new Vector3(0, 1, 0), _model.Rotation.y), 15, 0.1f));
+                ApplyForcedDrag(new ForcedDrag(new Vector3(0, 0, 1).Rotated(new Vector3(0, 1, 0), _model.Rotation.y), 15, 0.1f, "evade"));
             }
             else
             {
-                ApplyForcedDrag(new ForcedDrag(_vel, 15, 0.1f));
+                ApplyForcedDrag(new ForcedDrag(_vel, 15, 0.1f, "evade"));
             }
 
         }
@@ -320,13 +337,13 @@ public class Character : KinematicBody
         {
             _currentAttackDelay = TimeSpan.FromSeconds(_delaysByAttackDict["Lunge"]);
             SwordAnimator.Play("Lunge");
-            ApplyForcedDrag(new ForcedDrag(new Vector3(0, 0, 1).Rotated(new Vector3(0, 1, 0), _model.Rotation.y), 20, 0.15f));
+            ApplyForcedDrag(new ForcedDrag(new Vector3(0, 0, 1).Rotated(new Vector3(0, 1, 0), _model.Rotation.y), 20, 0.15f, "LungeAttacker"));
         }
         else if (_movingBackwardsFromTarget && IsOnFloor())
         {
             _currentAttackDelay = TimeSpan.FromSeconds(_delaysByAttackDict["Rising"]);
             SwordAnimator.Play("Rising");
-            ApplyForcedDrag(new ForcedDrag(new Vector3(0, 1, 0.2f).Rotated(new Vector3(0, 1, 0), _model.Rotation.y), 2.5f, 0.5f));
+            ApplyForcedDrag(new ForcedDrag(new Vector3(0, 1, 0.2f).Rotated(new Vector3(0, 1, 0), _model.Rotation.y), 2.5f, 0.5f, "RisingAttacker"));
         }
         else
         {
@@ -380,7 +397,7 @@ public class Character : KinematicBody
             }
             else if (SwordAnimator.CurrentAnimation == "Rising")
             {
-                dragToTarget = new ForcedDrag(new Vector3(0, 1, 0.1f).Rotated(new Vector3(0, 1, 0), _model.Rotation.y), 2.5f, 0.5f);
+                dragToTarget = new ForcedDrag(new Vector3(0, 1, 0.1f).Rotated(new Vector3(0, 1, 0), _model.Rotation.y), 2.5f, 0.5f, "RisingTarget");
             }
             (_attackRayCast.GetCollider() as EnemyNormal).ReceiveDamage(_damage, dragToTarget);
             _weaponDamageDealt = true;
