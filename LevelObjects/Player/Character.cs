@@ -68,21 +68,11 @@ public class Character : KinematicBody
         DelaysByAttackDict["Attack3"] = 0.75f;
         DelaysByAttackDict["Lunge"] = 1f;
         DelaysByAttackDict["Rising"] = 1f;
-
-
     }
-    public override void _PhysicsProcess(float delta)
+
+    private Vector3 HandleMovementInput()
     {
-        MovingTowardsTarget = false;
-        MovingBackwardsFromTarget = false;
-        Vel.x = 0;
-        Vel.z = 0;
         Vector3 input = new Vector3();
-        float runSpeed = 1f;
-        if (Input.IsActionPressed("Sprint"))
-        {
-            runSpeed = RunSpeedModifier;
-        }
         if (Input.IsActionPressed("MoveForward"))
         {
             input.z += 1;
@@ -100,7 +90,28 @@ public class Character : KinematicBody
             input.x += 1;
         }
         input = input.Normalized();
-        Vector3 direction = Transform.basis.z * input.z + Transform.basis.x * input.x;
+        return Transform.basis.z * input.z + Transform.basis.x * input.x;
+    }
+    private float HandleSprintInput()
+    {
+        if (Input.IsActionPressed("Sprint"))
+        {
+            return RunSpeedModifier;
+        }
+        else
+        {
+            return 1f;
+        }
+    }
+    public override void _PhysicsProcess(float delta)
+    {
+        //resetting key movement properties to make sure that movement stops if there's no player inout
+        MovingTowardsTarget = false;
+        MovingBackwardsFromTarget = false;
+        Vel.x = 0;
+        Vel.z = 0;
+        float runSpeed = HandleSprintInput();
+        Vector3 direction = HandleMovementInput();
 
         Vel.x = direction.x * MoveSpeed * runSpeed;
         Vel.z = direction.z * MoveSpeed * runSpeed;
@@ -115,8 +126,7 @@ public class Character : KinematicBody
             Vel.y = JumpForce;
             //GD.Print("Now character has this many gold pieces: <" + Gold.ToString() + ">");
         }
-
-        if (direction.x != 0 || direction.z != 0)
+        if ((direction.x != 0 || direction.z != 0))
         {
             //this line makes sure that player always move in expected direction regardless of PlayerAttachedCameraController y rotation.It basically rotates the Vel vector to match teh rotation of teh camera
             Vel = Vel.Rotated(new Vector3(0, 1, 0), PlayerCameraController.Rotation.y);
@@ -184,7 +194,11 @@ public class Character : KinematicBody
                 {
                     MovingBackwardsFromTarget = true;
                 }
-
+            }
+            else
+            {
+                //setting it to null if instance is not valid
+                lockOnTrarget = null;
             }
 
         }
@@ -193,10 +207,11 @@ public class Character : KinematicBody
             //we set LockOn target to null once player releases button of if there are no more enemies left on scene
             lockOnTrarget = null;
         }
+
         Vel = MoveAndSlide(Vel, Vector3.Up);
 
-
     }
+
     private void _on_RegenTimer_timeout()
     {
         ChangeHealth(RegenAmount);
