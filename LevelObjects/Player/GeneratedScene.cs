@@ -32,20 +32,29 @@ public class GeneratedScene : Spatial
         AddChild(Enemies);
         Enemies.Owner = this;
 
+        Spatial Props = new Spatial();
+        Props.Name = "Props";
+        AddChild(Props);
+        Props.Owner = this;
 
         Spatial Ground = new Spatial();
         Ground.Name = "Ground";
         AddChild(Ground);
         Ground.Owner = this;
         var FloorScene = GD.Load<PackedScene>("res://LevelObjects/FloorsAndWalls/FloorTile001_Normalized.tscn");
-        for (int i = 0; i < 2; i++)
+        var PassablePropScene = GD.Load<PackedScene>("res://LevelObjects/Props/Flower001_Normalized.tscn");
+        for (int i = -2; i < 2; i++)
         {
-            for (int j = 0; j < 2; j++)
+            for (int j = -2; j < 2; j++)
             {
                 Spatial FloorTile = FloorScene.Instance() as Spatial;
                 AddChild(FloorTile);
                 FloorTile.Owner = this;
                 FloorTile.Translate(new Vector3(i, 0, j));
+
+                var PassableProp = PassablePropScene.Instance() as PassableProp;
+                PassableProp.Init(this, Props, i, j);
+
             }
 
         }

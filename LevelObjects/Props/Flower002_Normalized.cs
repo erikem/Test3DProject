@@ -1,22 +1,13 @@
 using Godot;
 using System;
 
-public class Flower001_Normalized : PassableProp
+public class Flower002_Normalized : PassableProp
 {
     // Declare member variables here. Examples:
     // private int a = 2;
     // private string b = "text";
 
     // Called when the node enters the scene tree for the first time.
-    public override void _Ready()
-    {
-        /*GD.Print("The very first hacky object is here:");
-        GD.Print(Transform.origin);
-        var extraProp = GD.Load<PackedScene>("res://LevelObjects/Props/Flower002_Normalized.tscn");
-        var extraPropInstance = extraProp.Instance() as PassableProp;
-        extraPropInstance.Init(GetTree().Root.GetChild(0), GetNode("Prop") as Spatial, Transform.origin.x, Transform.origin.z);*/
-
-    }
 
     public override void Init(Node rootScene, Spatial scenePropsContainer, float x, float z)
     {

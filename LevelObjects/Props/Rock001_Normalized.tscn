@@ -1,6 +1,7 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://sketchfab/free_low_poly_forest/PP_Standard_Material.material" type="Material" id=1]
+[ext_resource path="res://LevelObjects/Props/Rock001_Normalized.cs" type="Script" id=2]
 
 [sub_resource type="ArrayMesh" id=1]
 resource_name = "Sketchfab_Scene_PP_Rock_Moss_Grown_11_56_PP_Standard_Material_0"
@@ -18,12 +19,15 @@ surfaces/0 = {
 }
 
 [node name="Rock001_Normalized" type="Spatial"]
+script = ExtResource( 2 )
 
-[node name="Container" type="Spatial" parent="."]
+[node name="Prop" type="Spatial" parent="."]
+
+[node name="ScalingNode" type="Spatial" parent="Prop"]
 transform = Transform( 0.3, 0, 0, 0, 0.3, 0, 0, 0, 0.3, 0, 0, 0 )
 
-[node name="PP_Rock_Moss_Grown_11_56_PP_Standard_Material_0" type="MeshInstance" parent="Container"]
+[node name="PP_Rock_Moss_Grown_11_56_PP_Standard_Material_0" type="MeshInstance" parent="Prop/ScalingNode"]
 transform = Transform( 0.001, 0, 0, 0, 0.001, 0, 0, 0, 0.001, 0, 0, 0 )
 mesh = SubResource( 1 )
-skeleton = NodePath("../..")
+skeleton = NodePath("../../..")
 material/0 = null

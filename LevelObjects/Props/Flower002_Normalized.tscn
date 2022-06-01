@@ -1,6 +1,7 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://sketchfab/free_low_poly_forest/PP_Standard_Material.material" type="Material" id=1]
+[ext_resource path="res://LevelObjects/Props/Flower002_Normalized.cs" type="Script" id=2]
 
 [sub_resource type="ArrayMesh" id=27]
 resource_name = "Sketchfab_Scene_PP_Hyacinth_04_PP_Standard_Material_0"
@@ -18,8 +19,13 @@ surfaces/0 = {
 }
 
 [node name="Flower002_Normalized" type="Spatial"]
+script = ExtResource( 2 )
 
-[node name="PP_Hyacinth_04_PP_Standard_Material_0" type="MeshInstance" parent="."]
+[node name="Prop" type="Spatial" parent="."]
+transform = Transform( 1, -4.96309e-22, 0, -4.96309e-22, 1, 8.47033e-22, 0, -8.47033e-22, 1, 0, 0, 0 )
+
+[node name="PP_Hyacinth_04_PP_Standard_Material_0" type="MeshInstance" parent="Prop"]
 transform = Transform( 0.01, 1.11022e-16, -3.72529e-10, -1.11022e-16, 0.01, 1.33227e-16, 3.72529e-10, -1.33227e-16, 0.01, 0, 0, 0 )
 mesh = SubResource( 27 )
+skeleton = NodePath("../..")
 material/0 = null

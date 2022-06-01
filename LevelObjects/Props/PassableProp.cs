@@ -1,35 +1,29 @@
 using Godot;
+using System;
 using System.Collections.Generic;
 
 public class PassableProp : Spatial
 {
-    private Node _rootScene;
     protected List<string> _complimentaryProps = new List<string>();
-    private Spatial _propHolder;
-    private Spatial _scenePropsContainer;
-    protected float _extraPropChance = 0.15f;
-    protected void _CustomReady()
-    {
-        _rootScene = GetTree().Root.GetChild(0);
-        _propHolder = GetNode("Prop") as Spatial;
-        _scenePropsContainer = _rootScene.GetNode("Props") as Spatial;
-        Place();
-    }
+    protected float _extraPropChance = 0.25f;
+    protected static Random _rnd = new Random();
 
-    protected void Place()
+    virtual public void Init(Node rootScene, Spatial scenePropsContainer, float x, float z)
     {
-        float offsetX = GD.Randf() * 0.8f + 0.1f;
-        float offsetZ = GD.Randf() * 0.8f + 0.1f;
-        int offsetAngle = (int)GD.Randi() % 180;
+        var _propHolder = GetNode("Prop") as Spatial;
+        float offsetX = x + (float)_rnd.NextDouble() * 0.8f + 0.1f;
+        float offsetZ = z + (float)_rnd.NextDouble() * 0.8f + 0.1f;
+        int offsetAngle = _rnd.Next(360);
         _propHolder.Translate(new Vector3(offsetX, 0, offsetZ));
         _propHolder.Rotate(Vector3.Up, Mathf.Deg2Rad(offsetAngle));
+        scenePropsContainer.CallDeferred("add_child", this);
+        CallDeferred("set_owner", rootScene);
         if (_complimentaryProps.Count > 0
-        && GD.Randf() < _extraPropChance)
+        && _rnd.NextDouble() < _extraPropChance)
         {
-            var extraProp = GD.Load<PackedScene>(_complimentaryProps[Mathf.Abs((int)GD.Randi()) % _complimentaryProps.Count]);
-            var extraPropInstance = extraProp.Instance();
-            _scenePropsContainer.AddChild(extraPropInstance);
-            extraPropInstance.Owner = _rootScene;
+            var extraProp = GD.Load<PackedScene>(_complimentaryProps[_rnd.Next(_complimentaryProps.Count)]);
+            var extraPropInstance = extraProp.Instance() as PassableProp;
+            extraPropInstance.Init(rootScene, scenePropsContainer, x, z);
         }
 
     }

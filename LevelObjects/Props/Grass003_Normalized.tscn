@@ -1,6 +1,7 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://sketchfab/campsite_low-poly_asset_pack/black.material" type="Material" id=1]
+[ext_resource path="res://LevelObjects/Props/Grass003_Normalized.cs" type="Script" id=2]
 
 [sub_resource type="ArrayMesh" id=1]
 resource_name = "Sketchfab_Scene_grass_black_0"
@@ -18,11 +19,11 @@ surfaces/0 = {
 }
 
 [node name="Grass003_Normalized" type="Spatial"]
+script = ExtResource( 2 )
 
-[node name="grass38" type="Spatial" parent="."]
-transform = Transform( 0.05, 0, 0, 0, 0.05, 0, 0, 0, 0.05, 0, 0, 0 )
+[node name="Prop" type="Spatial" parent="."]
 
-[node name="grass_black_0" type="MeshInstance" parent="grass38"]
-transform = Transform( 1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 1, 0 )
+[node name="grass_black_0" type="MeshInstance" parent="Prop"]
+transform = Transform( 0.05, 0, 0, 0, -2.18557e-09, 0.05, 0, -0.05, -2.18557e-09, 0.0471591, 0.0486646, -0.0138583 )
 mesh = SubResource( 1 )
 material/0 = null

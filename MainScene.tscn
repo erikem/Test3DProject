@@ -1,7 +1,8 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://LevelObjects/Player/Character001_Normalized.tscn" type="PackedScene" id=1]
 [ext_resource path="res://LevelObjects/FloorsAndWalls/FloorTile001_Normalized.tscn" type="PackedScene" id=2]
+[ext_resource path="res://LevelObjects/Props/Flower001_Normalized.tscn" type="PackedScene" id=3]
 [ext_resource path="res://LevelObjects/FloorsAndWalls/Wall001_Normalized.tscn" type="PackedScene" id=10]
 [ext_resource path="res://LevelObjects/FloorsAndWalls/WallTransparent001_Normalized.tscn" type="PackedScene" id=11]
 [ext_resource path="res://UI/UI.tscn" type="PackedScene" id=12]
@@ -210,6 +211,9 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 0, 6 )
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 0, 7 )
 
 [node name="Props" type="Spatial" parent="."]
+
+[node name="Flower001_Normalized" parent="Props" instance=ExtResource( 3 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, 1 )
 
 [node name="Character001_Normalized" parent="." instance=ExtResource( 1 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 1 )
