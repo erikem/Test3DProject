@@ -1,0 +1,7 @@
+[gd_scene format=2]
+
+[node name="MainSunContainer" type="Spatial"]
+
+[node name="MainSunLight" type="DirectionalLight" parent="."]
+transform = Transform( 0.337682, 0.803517, -0.490236, 0.214978, 0.441225, 0.871266, 0.916382, -0.399601, -0.0237445, 0, 4, 0 )
+shadow_enabled = true
