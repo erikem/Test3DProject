@@ -8,7 +8,7 @@ public class GeneratedScene : Spatial
     // private int a = 2;
     // private string b = "text";
     private static Random _rnd = new Random();
-    private int _mapSize = 20;
+    private int _mapSize = 30;
     private float _groundAreaPercentage = 0.3f;
     private MapGenerator _gameMap;
     private Node _sun;

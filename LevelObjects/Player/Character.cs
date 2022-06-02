@@ -38,7 +38,7 @@ public class Character : KinematicBody
     private Spatial _enemiesContainer;
     private Godot.Collections.Array _allEnemies;
     private KinematicBody _lockOnTrarget = null;
-    private float _moveTowardsThreshold = 25f;
+    private float _moveTowardsThreshold = 35f;
     private float _moveBackwardsThreshold = 155f;
     private bool _movingTowardsTarget = false;
     private bool _movingBackwardsFromTarget = false;
@@ -333,7 +333,7 @@ public class Character : KinematicBody
         SwordAnimator.Stop();
         _weaponDamageDealt = false;
         _lastAttackTime = DateTime.Now;
-        if (_movingTowardsTarget && GlobalTransform.origin.DistanceTo(LockOnTrarget.GlobalTransform.origin) > 1.5f)
+        if (_movingTowardsTarget && GlobalTransform.origin.DistanceTo(LockOnTrarget.GlobalTransform.origin) > 0.5f)
         {
             _currentAttackDelay = TimeSpan.FromSeconds(_delaysByAttackDict["Lunge"]);
             SwordAnimator.Play("Lunge");
