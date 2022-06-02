@@ -19,7 +19,6 @@ public class Coin : Area
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {
-        MainScene = GetNode("/root/MainScene/") as Spatial;
         RotationSpeed = (float)GD.RandRange(3, 5);
         RespawnTimer = GetNode("RespawnTimer") as Timer;
 

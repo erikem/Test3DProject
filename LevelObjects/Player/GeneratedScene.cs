@@ -21,6 +21,8 @@ public class GeneratedScene : Spatial
     private string _propsContainerName = "Props";
     private Spatial _groundContainer = new Spatial();
     private string _groundContainerName = "Ground";
+    private Spatial _wallContainer = new Spatial();
+    private string _wallContainerName = "Walls";
     private Spatial _treasureContainer = new Spatial();
     private string _treasureContainerName = "Treasure";
     private PackedScene _groundScene = GD.Load<PackedScene>("res://LevelObjects/FloorsAndWalls/FloorTile001_Normalized.tscn");
@@ -37,6 +39,11 @@ public class GeneratedScene : Spatial
     private Spatial _playerInstance;
     private string _playerTreePath = "res://LevelObjects/Player/Character001_Normalized.tscn";
     private string _playerNodeName = "Character001_Normalized";
+    private PackedScene _coinScene = GD.Load<PackedScene>("res://LevelObjects/Treasures/Coin001_Normalized.tscn");
+    private PackedScene _frontWallScene = GD.Load<PackedScene>("res://LevelObjects/FloorsAndWalls/Wall001_Normalized.tscn");
+    private PackedScene _backWallScene = GD.Load<PackedScene>("res://LevelObjects/FloorsAndWalls/WallTransparent001_Normalized.tscn");
+    private PackedScene _lavaFloorScene = GD.Load<PackedScene>("res://LevelObjects/FloorsAndWalls/LavaFloor001_Normalized.tscn");
+    private PackedScene _treePillarScene = GD.Load<PackedScene>("res://LevelObjects/Props/Tree001_Normalized.tscn");
 
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
@@ -48,10 +55,15 @@ public class GeneratedScene : Spatial
         {
             for (int j = -2; j < 2; j++)
             {
-                PlaceFloorTile(i, j);
+                PlaceGenericTile(i, j, "Floor");
                 PlacePassableProp(i, j);
             }
         }
+        PlaceGenericTile(3, 3, "FrontWall");
+        PlaceGenericTile(3, 2, "BackWall");
+        PlaceGenericTile(2, 3, "LavaFloor");
+        PlaceTree(1, 3);
+        PlaceCoin(0, 0);
         PlacePlayer(1, 1);
     }
 
@@ -71,12 +83,50 @@ public class GeneratedScene : Spatial
         PassableProp.Init(this, _propsContainer, x, z);
     }
 
-    private void PlaceFloorTile(int x, int z)
+    private bool PlaceGenericTile(int x, int z, string type)
     {
-        Spatial FloorTile = _groundScene.Instance() as Spatial;
-        _groundContainer.AddChild(FloorTile);
-        FloorTile.Owner = this;
-        FloorTile.Translate(new Vector3(x, 0, z));
+        Spatial GenericTile;
+        switch (type)
+        {
+            case "Floor":
+                GenericTile = _groundScene.Instance() as Spatial;
+                _groundContainer.AddChild(GenericTile);
+                break;
+            case "FrontWall":
+                GenericTile = _frontWallScene.Instance() as Spatial;
+                _wallContainer.AddChild(GenericTile);
+                break;
+            case "BackWall":
+                GenericTile = _backWallScene.Instance() as Spatial;
+                _wallContainer.AddChild(GenericTile);
+                break;
+            case "LavaFloor":
+                GenericTile = _lavaFloorScene.Instance() as Spatial;
+                _wallContainer.AddChild(GenericTile);
+                break;
+            default:
+                return false;
+        }
+        GenericTile.Owner = this;
+        GenericTile.Translate(new Vector3(x, 0, z));
+        return true;
+    }
+
+    private void PlaceTree(int x, int z)
+    {
+        PlaceGenericTile(x, z, "Floor");
+        Spatial Tree = _treePillarScene.Instance() as Spatial;
+        _wallContainer.AddChild(Tree);
+        Tree.Owner = this;
+        Tree.Translate(new Vector3(x + 0.5f, 0, z + 0.5f));
+    }
+
+    private void PlaceCoin(int x, int z)
+    {
+        Spatial Coin = _coinScene.Instance() as Spatial;
+        _treasureContainer.AddChild(Coin);
+        Coin.Owner = this;
+        Coin.Translate(new Vector3(x + 0.5f, 0, z + 0.5f));
     }
 
     private void GenerateContainers()
@@ -92,6 +142,10 @@ public class GeneratedScene : Spatial
         _groundContainer.Name = _groundContainerName;
         AddChild(_groundContainer);
         _groundContainer.Owner = this;
+
+        _wallContainer.Name = _wallContainerName;
+        AddChild(_wallContainer);
+        _wallContainer.Owner = this;
 
         _treasureContainer.Name = _treasureContainerName;
         AddChild(_treasureContainer);
