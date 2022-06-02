@@ -26,7 +26,9 @@ config/icon="res://Resources/icon.png"
 
 [display]
 
-window/size/height=768
+window/size/width=1920
+window/size/height=1080
+window/size/fullscreen=true
 
 [editor_plugins]
 
