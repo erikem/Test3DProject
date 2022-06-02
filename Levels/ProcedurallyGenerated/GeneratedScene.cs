@@ -51,6 +51,13 @@ public class GeneratedScene : Spatial
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {
+        PopulateBasicTemplatesForProceduralGen();
+        MapGenerator GameMap = new MapGenerator(_mapSize, true, _groundAreaPercentage,
+                0.01f, 20, 40,
+                0.01f, 4, 8,
+                0.01f, 10, 15,
+                1, "MaxFreeArea", false, 100);
+
         GenerateSun();
         GenerateUI();
         GenerateContainers();
@@ -72,6 +79,146 @@ public class GeneratedScene : Spatial
         PlacePlayer(0, 0);
         //PlaceEnemy(1, 1);
 
+    }
+
+    private static void PopulateBasicTemplatesForProceduralGen()
+    {
+        MapTemplate.AllTemplates.Clear();
+        MapTemplate.AddTemplate(
+            new float[7, 7]
+            {
+                {0,0,1,1,1,0,0},
+                {0,0,1,1,1,0,0},
+                {1,1,1,1,1,1,1},
+                {1,1,1,1,1,1,1},
+                {1,1,1,1,1,1,1},
+                {0,0,1,1,1,0,0},
+                {0,0,1,1,1,0,0}
+            },
+            new Coordinates2D(0, 2),
+            new Coordinates2D(0, 4),
+            new Coordinates2D(6, 2),
+            new Coordinates2D(6, 4));
+
+        MapTemplate.AddTemplate(
+             new float[7, 7]
+             {
+                 {0,0,1,1,1,0,0},
+                 {0,0,1,1,1,0,0},
+                 {1,1,1,1,1,1,1},
+                 {1,1,1,1,1,1,1},
+                 {1,1,1,1,1,1,1},
+                 {0,0,1,1,1,0,0},
+                 {0,0,1,1,1,0,0}
+             },
+             new Coordinates2D(2, 0),
+             new Coordinates2D(2, 6),
+             new Coordinates2D(4, 0),
+             new Coordinates2D(4, 6));
+
+        MapTemplate.AddTemplate(
+            new float[7, 7]
+            {
+                {0,0,1,1,1,0,0},
+                {0,0,1,1,1,0,0},
+                {1,1,1,1,1,1,1},
+                {1,1,1,1,1,1,1},
+                {1,1,1,1,1,1,1},
+                {0,0,1,1,1,0,0},
+                {0,0,1,1,1,0,0}
+            },
+            new Coordinates2D(3, 0),
+            new Coordinates2D(0, 3),
+            new Coordinates2D(6, 3),
+            new Coordinates2D(3, 6));
+
+        MapTemplate.AddTemplate(
+            new float[6, 6]
+            {
+                {0,0,1,1,0,0},
+                {0,0,1,1,0,0},
+                {1,1,1,1,1,1},
+                {1,1,1,1,1,1},
+                {0,0,1,1,0,0},
+                {0,0,1,1,0,0}
+            },
+            new Coordinates2D(0, 2),
+            new Coordinates2D(0, 3),
+            new Coordinates2D(5, 2),
+            new Coordinates2D(5, 3));
+
+        MapTemplate.AddTemplate(
+            new float[6, 6]
+            {
+                {1,1,1,1,1,1},
+                {1,1,1,1,1,1},
+                {0,0,0,0,1,1},
+                {0,0,0,0,1,1},
+                {0,0,0,0,1,1},
+                {0,0,0,0,1,1}
+            },
+            new Coordinates2D(0, 5),
+            new Coordinates2D(0, 5),
+            new Coordinates2D(5, 4),
+            new Coordinates2D(5, 5));
+
+        MapTemplate.AddTemplate(
+            new float[6, 6]
+            {
+                {1,1,0,0,0,0},
+                {1,1,0,0,0,0},
+                {1,1,0,0,0,0},
+                {1,1,0,0,0,0},
+                {1,1,1,1,1,1},
+                {1,1,1,1,1,1}
+            },
+            new Coordinates2D(0, 0),
+            new Coordinates2D(0, 1),
+            new Coordinates2D(5, 0),
+            new Coordinates2D(5, 5));
+
+
+        MapTemplate.AddTemplate(
+            new float[5, 5]
+            {
+                {0,1,1,1,0},
+                {1,1,1,1,1},
+                {1,1,1,1,1},
+                {1,1,1,1,1},
+                {0,1,1,1,0}
+            },
+            new Coordinates2D(0, 1),
+            new Coordinates2D(0, 3),
+            new Coordinates2D(3, 0),
+            new Coordinates2D(3, 3));
+
+        MapTemplate.AddTemplate(
+            new float[5, 5]
+            {
+                {0,1,1,1,0},
+                {1,1,1,1,1},
+                {1,1,1,1,1},
+                {1,1,1,1,1},
+                {0,1,1,1,0}
+            },
+            new Coordinates2D(2, 0),
+            new Coordinates2D(0, 2),
+            new Coordinates2D(4, 2),
+            new Coordinates2D(2, 4));
+
+        MapTemplate.AddTemplate(
+            new float[5, 5]
+            {
+                {0,0,1,0,0},
+                {0,0,1,0,0},
+                {1,1,1,1,1},
+                {0,0,1,0,0},
+                {0,0,1,0,0}
+            },
+            new Coordinates2D(2, 0),
+            new Coordinates2D(0, 2),
+            new Coordinates2D(4, 2),
+            new Coordinates2D(2, 4));
     }
 
     private void GenerateBoundingWalls()
