@@ -107,16 +107,16 @@ public class Coordinates2DArray
     /// <summary>
     /// generic function that calculates a number of blocks in a given area that match given condition. For example count of bloks that have value higher than 0,5 in a bottom right corner of 2D array
     /// </summary>
-    public int CountBlocks(float cellCheckValue, string cellCheckCondition, int fromRow = 0, int toRow = -1, int fromColumn = 0, int toColumn = -1)
+    public int CountBlocks(float cellCheckValue, string cellCheckCondition, int fromRow, int toRow, int fromColumn, int toColumn)
     {
-        if (toRow == -1)
+        /*if (toRow == -1000)
         {
             toRow = coordinatesArray.GetLength(0);
         }
-        if (toColumn == -1)
+        if (toColumn == -1000)
         {
             toColumn = coordinatesArray.GetLength(1);
-        }
+        }*/
         int count = 0;
         for (int i = fromRow; i < this.coordinatesArray.GetLength(0) && i <= toRow; i++)
         {
@@ -134,7 +134,7 @@ public class Coordinates2DArray
     /// <summary>
     ///counts number of all blocks in 2D array that have value higher than given one
     /// </summary>
-    public int CountBlocksHigherThan(float threshold, int fromRow = 0, int toRow = -1, int fromColumn = 0, int toColumn = -1)
+    public int CountBlocksHigherThan(float threshold, int fromRow, int toRow, int fromColumn, int toColumn)
     {
         return CountBlocks(threshold, ">", fromRow, toRow, fromColumn, toColumn);
     }
@@ -142,15 +142,20 @@ public class Coordinates2DArray
     /// <summary>
     /// counts number of all blocks in 2D array that have value higher or equal than given one
     /// </summary>
-    public int CountBlocksHigherOrEqualThan(float threshold, int fromRow = 0, int toRow = -1, int fromColumn = 0, int toColumn = -1)
+    public int CountBlocksHigherOrEqualThan(float threshold, int fromRow, int toRow, int fromColumn, int toColumn)
     {
         return CountBlocks(threshold, ">=", fromRow, toRow, fromColumn, toColumn);
+    }
+
+    public int CountBlocksHigherOrEqualThan(float threshold)
+    {
+        return CountBlocks(threshold, ">=", 0, coordinatesArray.GetLength(0), 0, coordinatesArray.GetLength(1));
     }
 
     /// <summary>
     /// counts number of all blocks in 2D array that have value lower than given one
     /// </summary>
-    public int CountBlocksLowerThan(float threshold, int fromRow = 0, int toRow = -1, int fromColumn = 0, int toColumn = -1)
+    public int CountBlocksLowerThan(float threshold, int fromRow, int toRow, int fromColumn, int toColumn)
     {
         return CountBlocks(threshold, "<", fromRow, toRow, fromColumn, toColumn);
     }
@@ -158,7 +163,7 @@ public class Coordinates2DArray
     /// <summary>
     /// counts number of all blocks in 2D array that have value lower or equal than given one
     /// </summary>
-    public int CountBlocksLowerOrEqualThan(float threshold, int fromRow = 0, int toRow = -1, int fromColumn = 0, int toColumn = -1)
+    public int CountBlocksLowerOrEqualThan(float threshold, int fromRow, int toRow, int fromColumn, int toColumn)
     {
         return CountBlocks(threshold, "<=", fromRow, toRow, fromColumn, toColumn);
     }
@@ -166,7 +171,7 @@ public class Coordinates2DArray
     /// <summary>
     /// counts number of all blocks in 2D array that have value equal to the given one
     /// </summary>
-    public int CountBlocksEqualTo(float threshold, int fromRow = 0, int toRow = -1, int fromColumn = 0, int toColumn = -1)
+    public int CountBlocksEqualTo(float threshold, int fromRow, int toRow, int fromColumn, int toColumn)
     {
         return CountBlocks(threshold, "==", fromRow, toRow, fromColumn, toColumn);
     }
@@ -174,9 +179,14 @@ public class Coordinates2DArray
     /// <summary>
     /// counts number of all blocks in 2D array that have value not equal to the given one
     /// </summary>
-    public int CountBlocksNotEqualTo(float threshold, int fromRow = 0, int toRow = -1, int fromColumn = 0, int toColumn = -1)
+    public int CountBlocksNotEqualTo(float threshold, int fromRow, int toRow, int fromColumn, int toColumn)
     {
         return CountBlocks(threshold, "!=", fromRow, toRow, fromColumn, toColumn);
+    }
+
+    public int CountBlocksNotEqualTo(float threshold)
+    {
+        return CountBlocks(threshold, "!=", 0, coordinatesArray.GetLength(0), 0, coordinatesArray.GetLength(1));
     }
 
     /// <summary>

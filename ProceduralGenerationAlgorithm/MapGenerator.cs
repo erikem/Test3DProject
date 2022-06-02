@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using Godot;
 
 
 public class MapGenerator
@@ -15,6 +16,31 @@ public class MapGenerator
     public Coordinates2DArray[] Layers
     {
         get { return layers; }
+    }
+
+    public Coordinates2DArray GroundLayer
+    {
+        get { return layers[0]; }
+    }
+    public Coordinates2DArray WallsLayer
+    {
+        get { return layers[1]; }
+    }
+    public Coordinates2DArray PassablePropsLayer
+    {
+        get { return layers[2]; }
+    }
+    public Coordinates2DArray PlayerLayer
+    {
+        get { return layers[3]; }
+    }
+    public Coordinates2DArray EnemiesLayer
+    {
+        get { return layers[4]; }
+    }
+    public Coordinates2DArray TreasuresLayer
+    {
+        get { return layers[5]; }
     }
 
     /// <summary>
@@ -52,7 +78,7 @@ public class MapGenerator
             int currentDirectionCountFullCells = 0;
 
             currentDirectionCountFullCells = groundMap.CountOneOrHigherBlocksFromPointLessRowLessColumn(point);
-            //Console.WriteLine("Count of occupied cells on TOP LEFT from " + point.ToStr() + ": " + currentDirectionCountFullCells.ToString());
+            //GD.Print("Count of occupied cells on TOP LEFT from " + point.ToStr() + ": " + currentDirectionCountFullCells.ToString());
             if (currentDirectionCountFullCells < bestDirectionCountFullCells)
             {
                 bestDirectionCountFullCells = currentDirectionCountFullCells;
@@ -60,7 +86,7 @@ public class MapGenerator
             }
 
             currentDirectionCountFullCells = groundMap.CountOneOrHigherBlocksFromPointLessRowMoreColumn(point);
-            //Console.WriteLine("Count of occupied cells on TOP RIGHT from " + point.ToStr() + ": " + currentDirectionCountFullCells.ToString());
+            //GD.Print("Count of occupied cells on TOP RIGHT from " + point.ToStr() + ": " + currentDirectionCountFullCells.ToString());
             if (currentDirectionCountFullCells < bestDirectionCountFullCells)
             {
                 bestDirectionCountFullCells = currentDirectionCountFullCells;
@@ -68,7 +94,7 @@ public class MapGenerator
             }
 
             currentDirectionCountFullCells = groundMap.CountOneOrHigherBlocksFromPointMoreRowLessColumn(point);
-            //Console.WriteLine("Count of occupied cells on BOTTOM LEFT from " + point.ToStr() + ": " + currentDirectionCountFullCells.ToString());
+            //GD.Print("Count of occupied cells on BOTTOM LEFT from " + point.ToStr() + ": " + currentDirectionCountFullCells.ToString());
             if (currentDirectionCountFullCells < bestDirectionCountFullCells)
             {
                 bestDirectionCountFullCells = currentDirectionCountFullCells;
@@ -76,7 +102,7 @@ public class MapGenerator
             }
 
             currentDirectionCountFullCells = groundMap.CountOneOrHigherBlocksFromPointMoreRowMoreColumn(point);
-            //Console.WriteLine("Count of occupied cells on BOTTOM RIGHT from " + point.ToStr() + ": " + currentDirectionCountFullCells.ToString());
+            //GD.Print("Count of occupied cells on BOTTOM RIGHT from " + point.ToStr() + ": " + currentDirectionCountFullCells.ToString());
             if (currentDirectionCountFullCells < bestDirectionCountFullCells)
             {
                 bestDirectionCountFullCells = currentDirectionCountFullCells;
@@ -91,7 +117,7 @@ public class MapGenerator
             int currentDirectionCountFreeCells = 0;
 
             currentDirectionCountFreeCells = groundMap.CountLessThanOneBlocksFromPointLessRowLessColumn(point);
-            //Console.WriteLine("Count of free cells on TOP LEFT from " + point.ToStr() + ": " + currentDirectionCountFreeCells.ToString());
+            //GD.Print("Count of free cells on TOP LEFT from " + point.ToStr() + ": " + currentDirectionCountFreeCells.ToString());
             if (currentDirectionCountFreeCells > bestDirectionCountFreeCells)
             {
                 bestDirectionCountFreeCells = currentDirectionCountFreeCells;
@@ -99,7 +125,7 @@ public class MapGenerator
             }
 
             currentDirectionCountFreeCells = groundMap.CountLessThanOneBlocksFromPointLessRowMoreColumn(point);
-            //Console.WriteLine("Count of free cells on TOP RIGHT from " + point.ToStr() + ": " + currentDirectionCountFreeCells.ToString());
+            //GD.Print("Count of free cells on TOP RIGHT from " + point.ToStr() + ": " + currentDirectionCountFreeCells.ToString());
             if (currentDirectionCountFreeCells > bestDirectionCountFreeCells)
             {
                 bestDirectionCountFreeCells = currentDirectionCountFreeCells;
@@ -107,7 +133,7 @@ public class MapGenerator
             }
 
             currentDirectionCountFreeCells = groundMap.CountLessThanOneBlocksFromPointMoreRowLessColumn(point);
-            //Console.WriteLine("Count of free cells on BOTTOM LEFT from " + point.ToStr() + ": " + currentDirectionCountFreeCells.ToString());
+            //GD.Print("Count of free cells on BOTTOM LEFT from " + point.ToStr() + ": " + currentDirectionCountFreeCells.ToString());
             if (currentDirectionCountFreeCells > bestDirectionCountFreeCells)
             {
                 bestDirectionCountFreeCells = currentDirectionCountFreeCells;
@@ -115,7 +141,7 @@ public class MapGenerator
             }
 
             currentDirectionCountFreeCells = groundMap.CountLessThanOneBlocksFromPointMoreRowMoreColumn(point);
-            //Console.WriteLine("Count of free cells on BOTTOM RIGHT from " + point.ToStr() + ": " + currentDirectionCountFreeCells.ToString());
+            //GD.Print("Count of free cells on BOTTOM RIGHT from " + point.ToStr() + ": " + currentDirectionCountFreeCells.ToString());
             if (currentDirectionCountFreeCells > bestDirectionCountFreeCells)
             {
                 bestDirectionCountFreeCells = currentDirectionCountFreeCells;
@@ -130,7 +156,7 @@ public class MapGenerator
             float currentDirectionFreeArea = 1f;
 
             currentDirectionFreeArea = groundMap.CountPopulatedAreaByOnesFromPointLessRowLessColumn(point);
-            //Console.WriteLine("% of occupied area on TOP LEFT from " + point.ToStr() + ": " + currentDirectionFreeArea.ToString());
+            //GD.Print("% of occupied area on TOP LEFT from " + point.ToStr() + ": " + currentDirectionFreeArea.ToString());
             if (currentDirectionFreeArea < bestDirectionFreeArea)
             {
                 bestDirectionFreeArea = currentDirectionFreeArea;
@@ -138,7 +164,7 @@ public class MapGenerator
             }
 
             currentDirectionFreeArea = groundMap.CountPopulatedAreaByOnesFromPointLessRowMoreColumn(point);
-            //Console.WriteLine("% of occupied area on TOP RIGHT from " + point.ToStr() + ": " + currentDirectionFreeArea.ToString());
+            //GD.Print("% of occupied area on TOP RIGHT from " + point.ToStr() + ": " + currentDirectionFreeArea.ToString());
             if (currentDirectionFreeArea < bestDirectionFreeArea)
             {
                 bestDirectionFreeArea = currentDirectionFreeArea;
@@ -146,7 +172,7 @@ public class MapGenerator
             }
 
             currentDirectionFreeArea = groundMap.CountPopulatedAreaByOnesFromPointMoreRowLessColumn(point);
-            //Console.WriteLine("% of occupied area on BOTTOM LEFT from " + point.ToStr() + ": " + currentDirectionFreeArea.ToString());
+            //GD.Print("% of occupied area on BOTTOM LEFT from " + point.ToStr() + ": " + currentDirectionFreeArea.ToString());
             if (currentDirectionFreeArea < bestDirectionFreeArea)
             {
                 bestDirectionFreeArea = currentDirectionFreeArea;
@@ -154,7 +180,7 @@ public class MapGenerator
             }
 
             currentDirectionFreeArea = groundMap.CountPopulatedAreaByOnesFromPointMoreRowMoreColumn(point);
-            //Console.WriteLine("% of occupied area on BOTTOM RIGHT from " + point.ToStr() + ": " + currentDirectionFreeArea.ToString());
+            //GD.Print("% of occupied area on BOTTOM RIGHT from " + point.ToStr() + ": " + currentDirectionFreeArea.ToString());
             if (currentDirectionFreeArea < bestDirectionFreeArea)
             {
                 bestDirectionFreeArea = currentDirectionFreeArea;
@@ -163,7 +189,7 @@ public class MapGenerator
         }
         #endregion
 
-        //Console.WriteLine("Best anchor point: " + bestAnchorPoint);
+        //GD.Print("Best anchor point: " + bestAnchorPoint);
         #endregion
         return bestAnchorPoint;
 
@@ -196,7 +222,7 @@ public class MapGenerator
             {
                 randomHalfCell = groundMap.RandomHalfCell();
                 //randomHalfCell.Print();
-                //Console.WriteLine("Value in cell: " + groundMap.CoordinatesArray[randomHalfCell.Row, randomHalfCell.Column]);
+                //GD.Print("Value in cell: " + groundMap.CoordinatesArray[randomHalfCell.Row, randomHalfCell.Column]);
                 bestAnchorPoint = DetermineBestAnchorPoint(randomHalfCell, algorithm, groundMap);
             }
             //initing variable for efficiency (efficiecny is the value of how big % of the template was populated into 0.5 and 0 cells)
@@ -209,7 +235,7 @@ public class MapGenerator
                 {
                     randomHalfCell = groundMap.RandomHalfCell();
                     //randomHalfCell.Print();
-                    //Console.WriteLine("Value in cell: " + groundMap.CoordinatesArray[randomHalfCell.Row, randomHalfCell.Column]);
+                    //GD.Print("Value in cell: " + groundMap.CoordinatesArray[randomHalfCell.Row, randomHalfCell.Column]);
                     bestAnchorPoint = DetermineBestAnchorPoint(randomHalfCell, algorithm, groundMap);
                 }
                 //selecting random sample from the collection of samples
@@ -246,20 +272,29 @@ public class MapGenerator
 
         foreach (var cell in nonGroundCells)
         {
+
             int countGroundRowsAbove = groundMap.CountBlocks(1, ">=", 0, cell.Row, cell.Column, cell.Column);
             int countGroundRowsBelow = groundMap.CountBlocks(1, ">=", cell.Row, mapSize - 1, cell.Column, cell.Column);
             int countGroundColumnsLeft = groundMap.CountBlocks(1, ">=", cell.Row, cell.Row, 0, cell.Column);
             int countGroundColumnsRight = groundMap.CountBlocks(1, ">=", cell.Row, cell.Row, cell.Column, mapSize - 1);
-            int countGroundRowsAboveColumnsLeftExcludingCurrent = groundMap.CountBlocks(1, ">=", 0, cell.Row - 1, 0, cell.Column - 1);
+            int countGroundAndWallsRowsAboveColumnsLeftExcludingCurrent = groundMap.CountBlocks(0, ">", 0, cell.Row - 1, 0, cell.Column - 1);
 
             int groundAdjacent = 0;
             groundAdjacent += groundMap.CountBlocks(1, ">=", cell.Row + 1, cell.Row + 1, cell.Column, cell.Column);
             groundAdjacent += groundMap.CountBlocks(1, ">=", cell.Row - 1, cell.Row - 1, cell.Column, cell.Column);
             groundAdjacent += groundMap.CountBlocks(1, ">=", cell.Row, cell.Row, cell.Column + 1, cell.Column + 1);
             groundAdjacent += groundMap.CountBlocks(1, ">=", cell.Row, cell.Row, cell.Column - 1, cell.Column - 1);
+
+            /*GD.Print("Checking (" + cell.Row + "," + cell.Column + "):");
+            GD.Print("countGroundRowsAbove: " + countGroundRowsAbove);
+            GD.Print("countGroundRowsBelow: " + countGroundRowsBelow);
+            GD.Print("countGroundColumnsLeft: " + countGroundColumnsLeft);
+            GD.Print("countGroundColumnsRight: " + countGroundColumnsRight);
+            GD.Print("countGroundAndWallsRowsAboveColumnsLeftExcludingCurrent: " + countGroundAndWallsRowsAboveColumnsLeftExcludingCurrent);
+            GD.Print("groundAdjacent: " + groundAdjacent);*/
             if (shiftedAngle)
             {
-                if (countGroundRowsAboveColumnsLeftExcludingCurrent == 0)
+                if (countGroundAndWallsRowsAboveColumnsLeftExcludingCurrent == 0)
                 {
                     wallsMapArray[cell.Row, cell.Column] = 1;
                 }
@@ -348,32 +383,32 @@ public class MapGenerator
 
     public void PrintMap(float minValue = 0.001f, bool formatted = true)
     {
-        Console.WriteLine("Ground Layer:");
+        GD.Print("Ground Layer:");
         if (layers[0] != null)
         {
             layers[0].PrintArray(minValue, formatted);
         }
-        Console.WriteLine("Walls Layer:");
+        GD.Print("Walls Layer:");
         if (layers[1] != null)
         {
             layers[1].PrintArray(minValue, formatted);
         }
-        Console.WriteLine("Passable props Layer:");
+        GD.Print("Passable props Layer:");
         if (layers[2] != null)
         {
             layers[2].PrintArray(minValue, formatted);
         }
-        Console.WriteLine("Player Layer:");
+        GD.Print("Player Layer:");
         if (layers[3] != null)
         {
             layers[3].PrintArray(minValue, formatted);
         }
-        Console.WriteLine("Enemies Layer:");
+        GD.Print("Enemies Layer:");
         if (layers[4] != null)
         {
             layers[4].PrintArray(minValue, formatted);
         }
-        Console.WriteLine("Treasure Layer:");
+        GD.Print("Treasure Layer:");
         if (layers[5] != null)
         {
             layers[5].PrintArray(minValue, formatted);
