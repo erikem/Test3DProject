@@ -39,6 +39,7 @@ public class GeneratedScene : Spatial
     private Spatial _playerInstance;
     private string _playerTreePath = "res://LevelObjects/Player/Character001_Normalized.tscn";
     private string _playerNodeName = "Character001_Normalized";
+    private PackedScene _enemyScene = GD.Load<PackedScene>("res://LevelObjects/Enemies/EnemyNormal001_Normalized.tscn");
     private PackedScene _coinScene = GD.Load<PackedScene>("res://LevelObjects/Treasures/Coin001_Normalized.tscn");
     private PackedScene _frontWallScene = GD.Load<PackedScene>("res://LevelObjects/FloorsAndWalls/Wall001_Normalized.tscn");
     private PackedScene _backWallScene = GD.Load<PackedScene>("res://LevelObjects/FloorsAndWalls/WallTransparent001_Normalized.tscn");
@@ -64,7 +65,9 @@ public class GeneratedScene : Spatial
         PlaceGenericTile(2, 3, "LavaFloor");
         PlaceTree(1, 3);
         PlaceCoin(0, 0);
-        PlacePlayer(1, 1);
+        PlacePlayer(0, 0);
+        PlaceEnemy(1, 1);
+
     }
 
     private void PlacePlayer(float x, float z)
@@ -74,7 +77,15 @@ public class GeneratedScene : Spatial
         _playerInstance.Name = _playerNodeName;
         AddChild(_playerInstance);
         _playerInstance.Owner = this;
-        _playerInstance.Translate(new Vector3(x, 0, z));
+        _playerInstance.Translate(new Vector3(x + 0.5f, 0, z + 0.5f));
+    }
+
+    private void PlaceEnemy(float x, float z)
+    {
+        Spatial _enemyInstance = _enemyScene.Instance() as Spatial;
+        _enemiesContainer.AddChild(_enemyInstance);
+        _enemyInstance.Owner = this;
+        _enemyInstance.Translate(new Vector3(x + 0.5f, 0, z + 0.5f));
     }
 
     private void PlacePassableProp(int x, int z)
