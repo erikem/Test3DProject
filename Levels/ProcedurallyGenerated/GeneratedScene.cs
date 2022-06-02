@@ -8,8 +8,9 @@ public class GeneratedScene : Spatial
     // private int a = 2;
     // private string b = "text";
     private static Random _rnd = new Random();
-    private int _mapSize = 5;
+    private int _mapSize = 20;
     private float _groundAreaPercentage = 0.3f;
+    private MapGenerator _gameMap;
     private Node _sun;
     private string _sunTreePath = "res://LevelObjects/MainSunLight.tscn";
     private CanvasLayer _uiCanvas = new CanvasLayer();
@@ -52,33 +53,137 @@ public class GeneratedScene : Spatial
     public override void _Ready()
     {
         PopulateBasicTemplatesForProceduralGen();
-        MapGenerator GameMap = new MapGenerator(_mapSize, true, _groundAreaPercentage,
-                0.01f, 20, 40,
-                0.01f, 4, 8,
-                0.01f, 10, 15,
-                1, "MaxFreeArea", false, 100);
-
+        GenerateProceduralMapLayers();
         GenerateSun();
         GenerateUI();
         GenerateContainers();
         GenerateBoundingWalls();
+        GenerateFloor();
+        GenerateWallsAndObstacles();
+        GeneratePlayer();
+        GeneratePassableProps();
+        GenerateTreasures();
+        GenerateEnemies();
+    }
 
+    private void GenerateProceduralMapLayers()
+    {
+        int expectedGroundTiles = (int)(_mapSize * _mapSize * _groundAreaPercentage);
+        _gameMap = new MapGenerator(_mapSize, true, _groundAreaPercentage,
+                0.01f, (int)(expectedGroundTiles * 0.75), expectedGroundTiles,
+                0.01f, (int)(expectedGroundTiles * 0.025f), (int)(expectedGroundTiles * 0.05f),
+                0.01f, (int)(expectedGroundTiles * 0.1f), (int)(expectedGroundTiles * 0.15f),
+                1, "MaxFreeArea", false, 100);
+    }
+
+    private void GenerateEnemies()
+    {
         for (int i = 0; i < _mapSize; i++)
         {
             for (int j = 0; j < _mapSize; j++)
             {
-                PlaceGenericTile(i, j, "Floor");
-                PlacePassableProp(i, j);
+                if (_gameMap.EnemiesLayer.CoordinatesArray[i, j] >= 1)
+                {
+                    float x = _mapSize - j - 1;
+                    float z = _mapSize - i - 1;
+                    PlaceEnemy(x, z);
+                }
             }
         }
-        PlaceGenericTile(3, 3, "FrontWall");
-        PlaceGenericTile(3, 2, "BackWall");
-        PlaceGenericTile(2, 3, "LavaFloor");
-        PlaceTree(1, 3);
-        PlaceCoin(0, 0);
-        PlacePlayer(0, 0);
-        //PlaceEnemy(1, 1);
+    }
 
+    private void GenerateTreasures()
+    {
+        for (int i = 0; i < _mapSize; i++)
+        {
+            for (int j = 0; j < _mapSize; j++)
+            {
+                if (_gameMap.TreasuresLayer.CoordinatesArray[i, j] >= 1)
+                {
+                    float x = _mapSize - j - 1;
+                    float z = _mapSize - i - 1;
+                    PlaceCoin(x, z);
+                }
+            }
+        }
+    }
+
+    private void GeneratePassableProps()
+    {
+        for (int i = 0; i < _mapSize; i++)
+        {
+            for (int j = 0; j < _mapSize; j++)
+            {
+                if (_gameMap.PassablePropsLayer.CoordinatesArray[i, j] >= 1)
+                {
+                    float x = _mapSize - j - 1;
+                    float z = _mapSize - i - 1;
+                    PlacePassableProp(x, z);
+                }
+            }
+        }
+    }
+
+    private void GeneratePlayer()
+    {
+        for (int i = 0; i < _mapSize; i++)
+        {
+            for (int j = 0; j < _mapSize; j++)
+            {
+                if (_gameMap.PlayerLayer.CoordinatesArray[i, j] >= 1)
+                {
+                    float x = _mapSize - j - 1;
+                    float z = _mapSize - i - 1;
+                    PlacePlayer(x, z);
+                }
+            }
+        }
+    }
+
+    private void GenerateWallsAndObstacles()
+    {
+        for (int i = 0; i < _mapSize; i++)
+        {
+            for (int j = 0; j < _mapSize; j++)
+            {
+                if (_gameMap.WallsLayer.CoordinatesArray[i, j] >= 1)
+                {
+                    float x = _mapSize - j - 1;
+                    float z = _mapSize - i - 1;
+                    switch (_gameMap.WallsLayer.CoordinatesArray[i, j])
+                    {
+                        case 1:
+                            PlaceGenericTile(x, z, "FrontWall");
+                            break;
+                        case 2:
+                            PlaceGenericTile(x, z, "BackWall");
+                            break;
+                        case 3:
+                            PlaceGenericTile(x, z, "LavaFloor");
+                            break;
+                        case 4:
+                            PlaceTree(x, z);
+                            break;
+                    }
+                }
+            }
+        }
+    }
+
+    private void GenerateFloor()
+    {
+        for (int i = 0; i < _mapSize; i++)
+        {
+            for (int j = 0; j < _mapSize; j++)
+            {
+                if (_gameMap.GroundLayer.CoordinatesArray[i, j] >= 1)
+                {
+                    float x = _mapSize - j - 1;
+                    float z = _mapSize - i - 1;
+                    PlaceGenericTile(x, z, "Floor");
+                }
+            }
+        }
     }
 
     private static void PopulateBasicTemplatesForProceduralGen()
@@ -254,13 +359,13 @@ public class GeneratedScene : Spatial
         _enemyInstance.Translate(new Vector3(x + 0.5f, 0, z + 0.5f));
     }
 
-    private void PlacePassableProp(int x, int z)
+    private void PlacePassableProp(float x, float z)
     {
         var PassableProp = _passablePropsScenes[_rnd.Next(_passablePropsScenes.Count)].Instance() as PassableProp;
         PassableProp.Init(this, _propsContainer, x, z);
     }
 
-    private bool PlaceGenericTile(int x, int z, string type)
+    private bool PlaceGenericTile(float x, float z, string type)
     {
         Spatial GenericTile;
         switch (type)
@@ -289,7 +394,7 @@ public class GeneratedScene : Spatial
         return true;
     }
 
-    private void PlaceTree(int x, int z)
+    private void PlaceTree(float x, float z)
     {
         PlaceGenericTile(x, z, "Floor");
         Spatial Tree = _treePillarScene.Instance() as Spatial;
@@ -298,7 +403,7 @@ public class GeneratedScene : Spatial
         Tree.Translate(new Vector3(x + 0.5f, 0, z + 0.5f));
     }
 
-    private void PlaceCoin(int x, int z)
+    private void PlaceCoin(float x, float z)
     {
         Spatial Coin = _coinScene.Instance() as Spatial;
         _treasureContainer.AddChild(Coin);
