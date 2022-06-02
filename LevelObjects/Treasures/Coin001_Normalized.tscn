@@ -4,7 +4,7 @@
 [ext_resource path="res://sketchfab/coin/Material_001.material" type="Material" id=2]
 
 [sub_resource type="SphereShape" id=2]
-radius = 0.81
+radius = 1.08315
 
 [sub_resource type="ArrayMesh" id=1]
 resource_name = "Sketchfab_Scene_bitcoin_Material001_0"
