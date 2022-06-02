@@ -8,6 +8,8 @@ public class GeneratedScene : Spatial
     // private int a = 2;
     // private string b = "text";
     private static Random _rnd = new Random();
+    private int _mapSize = 5;
+    private float _groundAreaPercentage = 0.3f;
     private Node _sun;
     private string _sunTreePath = "res://LevelObjects/MainSunLight.tscn";
     private CanvasLayer _uiCanvas = new CanvasLayer();
@@ -52,9 +54,11 @@ public class GeneratedScene : Spatial
         GenerateSun();
         GenerateUI();
         GenerateContainers();
-        for (int i = -2; i < 2; i++)
+        GenerateBoundingWalls();
+
+        for (int i = 0; i < _mapSize; i++)
         {
-            for (int j = -2; j < 2; j++)
+            for (int j = 0; j < _mapSize; j++)
             {
                 PlaceGenericTile(i, j, "Floor");
                 PlacePassableProp(i, j);
@@ -66,8 +70,23 @@ public class GeneratedScene : Spatial
         PlaceTree(1, 3);
         PlaceCoin(0, 0);
         PlacePlayer(0, 0);
-        PlaceEnemy(1, 1);
+        //PlaceEnemy(1, 1);
 
+    }
+
+    private void GenerateBoundingWalls()
+    {
+        PlaceGenericTile(-1, -1, "BackWall");
+        PlaceGenericTile(_mapSize, _mapSize, "FrontWall");
+        PlaceGenericTile(-1, _mapSize, "FrontWall");
+        PlaceGenericTile(_mapSize, -1, "FrontWall");
+        for (int i = 0; i < _mapSize; i++)
+        {
+            PlaceGenericTile(-1, i, "BackWall");
+            PlaceGenericTile(i, -1, "BackWall");
+            PlaceGenericTile(_mapSize, i, "FrontWall");
+            PlaceGenericTile(i, _mapSize, "FrontWall");
+        }
     }
 
     private void PlacePlayer(float x, float z)
