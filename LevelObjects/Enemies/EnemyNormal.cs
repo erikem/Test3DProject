@@ -8,6 +8,7 @@ public class EnemyNormal : KinematicBody
     // private string b = "text";
 
     // Called when the node enters the scene tree for the first time.
+    private static Random _rnd = new Random();
     private float _currentHP = 3f;
     private float _maxHP = 3f;
     private float _damage = 1f;
@@ -111,7 +112,7 @@ public class EnemyNormal : KinematicBody
         {
             _lastEvadedAttackID = _player.AttackID;
             if (DateTime.Now - _lastEvadeTime >= _evadeCoolDown
-                || GD.Randf() <= _extarEvadeChance)
+                || _rnd.NextDouble() <= _extarEvadeChance)
             {
                 var dist = GlobalTransform.origin.DistanceTo(_playerModel.GlobalTransform.origin);
                 if (_player.LockOnTrarget == this)
@@ -120,7 +121,7 @@ public class EnemyNormal : KinematicBody
                     && dist < 5)
                     {
                         _lastEvadeTime = DateTime.Now;
-                        if (GD.Randf() <= 0.5f)
+                        if (_rnd.NextDouble() <= 0.5f)
                         {
                             ApplyForcedDrag(new ForcedDrag(new Vector3(1, 0, 0).Rotated(new Vector3(0, 1, 0), Rotation.y), 12, 0.08f, "evade"));
                         }
@@ -187,7 +188,7 @@ public class EnemyNormal : KinematicBody
         _swordAnimator.Stop();
         _weaponDamageDealt = false;
         _lastAttackTime = DateTime.Now;
-        if (GD.RandRange(1, 100) > 50)
+        if (_rnd.NextDouble() <= 0.5f)
         {
             _swordAnimator.Play("Attack1");
         }
